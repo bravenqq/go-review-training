@@ -25,6 +25,8 @@ func main() {
 	var p *Person
 	// fmt.Printf("p value %v name:%s age:%d\n", p, p.name, p.age)
 	fmt.Printf("p value %v \n", p)
+	p = &person
+	fmt.Printf("p value %v \n", p)
 	var counts map[string]int
 	fmt.Printf("counts value %v lengths:%d\n", counts, len(counts))
 	var add func(int, int) int
