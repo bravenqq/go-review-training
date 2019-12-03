@@ -16,6 +16,12 @@ func main() {
 	x = y
 	fmt.Printf("x %v,y %v\n", x, y)
 	fmt.Printf("y %p\n", &y)
+
+	arr := []int{10, 9, 8}
+	for i := 0; i < len(arr); i++ {
+		j := len(arr) - i
+		arr[i] += j
+	}
 }
 
 func incr(x *int) {
