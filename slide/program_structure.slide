@@ -118,7 +118,7 @@ go中变量默认初始化作用：
   变量通过名称区分了不同的变量
 
 * 代码
-.code ./go-review-training/initvalue/main.go
+.code ../initvalue/main.go
 
 * 指针
 什么是指针: 指针的值保存了变量的地址
@@ -144,7 +144,7 @@ go中变量默认初始化作用：
   *p代表变量的值，通过*p=expression更新了变量的值
 
 * code
-.code ./go-review-training/pointer/main.go
+.code ../pointer/main.go
 
 * 解释
 - 函数返回变量地址时，在函数运行结束后变量仍然存在
@@ -155,12 +155,12 @@ go中变量默认初始化作用：
 * new Function
   p := new(int)
   new(T)创建了匿名类型为T的变量，初始化匿名变量的值为对应类型零值，并且把它的地址返回
-.code ./go-review-training/new/main.go
+.code ../new/main.go
 
 * 变量的赋值
 赋值的格式
 
-.code ./go-review-training/assignment/main.go
+.code ../assignment/main.go
 
 * 可赋值性
 
@@ -183,7 +183,16 @@ go中变量默认初始化作用：
 - 函数中的参数和返回值也是局部变量，在其闭包函数被调用时创建,函数结束时如果没有外部引用时结束
 
 * code
-.code ./go-review-training/lifetime/main.go
+.code ../lifetime/main.go
+
+* 如何确定变量的内存分配在堆上还是栈上
+
+  当局部变量需要的内存很大时，变量更可能分配在堆上
+  当局部变量发生了逃逸，变量分配在堆上:q;如果没有发生逃逸则分配在函数的栈空间上
+  如果函数的局部变量在函数结束时编译器不能确定没有被其他地方引用，则分配在堆上；否则分配在函数栈空间上
+
+* 变量的内存分配在堆上还是栈上有什么区别
+* 垃圾回收器如何确定何时回收变量
 
 
 * 变量的内存分配
