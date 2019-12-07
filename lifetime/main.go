@@ -1,13 +1,9 @@
-package main
+pangci-lint runckage main
 
-import (
-	"fmt"
-)
-
-var a int
+import "fmt"
 
 func main() {
-	a = 10
+	a := 10
 	x := &a
 	fmt.Printf("x %p\n", &x)
 	incr(x)
