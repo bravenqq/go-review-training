@@ -1,4 +1,4 @@
-pangci-lint runckage main
+package main
 
 import "fmt"
 
@@ -20,6 +20,7 @@ func main() {
 	}
 }
 
+// START OMIT
 func incr(x *int) {
 	fmt.Printf("x %p\n", &x)
 	*x++
@@ -30,3 +31,5 @@ func add(a, b int) *int {
 	fmt.Printf("y %p\n", &y)
 	return &y
 }
+
+// END OMIT

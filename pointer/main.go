@@ -20,6 +20,7 @@ func main() {
 	fmt.Printf("p: %v, *p %d, x %d\n", p, *p, x)
 }
 
+// START OMIT
 func incr(p *int) {
 	*p++
 }
@@ -29,3 +30,5 @@ func add(x, y int) *int {
 	fmt.Printf("res %v\n", &res)
 	return &res
 }
+
+// END OMIT

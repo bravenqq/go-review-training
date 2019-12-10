@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// START OMIT
 func main() {
 	var x int
 	x = 1
@@ -26,3 +27,5 @@ func fib(n int) int {
 	}
 	return x
 }
+
+// END OMIT
