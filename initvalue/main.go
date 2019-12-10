@@ -5,6 +5,7 @@ import (
 	"io"
 )
 
+// START OMIT
 func main() {
 	var a int
 	fmt.Println(a)
@@ -37,3 +38,5 @@ type Person struct {
 	name string
 	age  int
 }
+
+// END OMIT

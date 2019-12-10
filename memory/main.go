@@ -16,6 +16,7 @@ func main() {
 	f := Fibonacii
 }
 
+// START OMIT
 func Fibonacii() func() int {
 	// escape to heap 函数结束时变量仍被别的函数使用
 	a, b := 0, 1
@@ -31,3 +32,5 @@ func incr(x int) *int {
 	//escape to heap,函数结束后反回了地址
 	return &x
 }
+
+// END OMIT
