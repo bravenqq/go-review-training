@@ -364,6 +364,7 @@ go中变量内存分配的分析方法
   type name Type(基础类型)
 
   重新定义以Type类型为基础类类型的类型的真正含义
+  基础类型相同的类之间可以类型转换
 
 * code
 .code ../type/main.go
