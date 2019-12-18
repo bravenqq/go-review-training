@@ -13,6 +13,13 @@ func main() {
 		fmt.Printf("char:%c code:%d type:%T\n", c, c, c)
 	}
 	fmt.Println("------------------------------------------------")
+	data = []byte{97, 98, 99}
+	fmt.Printf("data len:%d cap:%d\n", len(data), cap(data))
+	for _, c := range data {
+		fmt.Printf("char:%c code:%d type:%T\n", c, c, c)
+	}
+	fmt.Println(data)
+
 	//s字符串中存储的是字符对应码点编码之后的值
 	//在编辑器中使用设置的utf-8解码序列值展示成"abc"字符串
 	s := "abc"
