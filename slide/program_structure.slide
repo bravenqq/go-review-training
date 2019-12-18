@@ -730,13 +730,13 @@ UTF-8编码的优缺点势
 * []byte
 
 []byte定义
-  
+
   byte是uin8别名，[]byte是byte类型数据的数组
 
   可以用来存放编码后的码点值
 
   是字符串的底层数据类型，可以与字符串转换
-  
+
 []byte内存结构
 
   在go源码中slice的机构定义如下：
@@ -762,17 +762,37 @@ UTF-8编码的优缺点势
   string可以比较，[]byte不行
 
 []byte如和转成string,过程怎么实现
-  
+
   []byte转成string,会开辟新的内存空间,拷贝[]byte中的数据，赋值给string
 
   string转换成[]byte类型也要开辟新的内存保存string的值
 
 []byte和string分别适合在什么场合下来存储字符值
-  
+
   当需要大量字符串处理时[]byte效率更高
 
 * code
 
 .code ../byte/main.go /func main/,/^}/
-  
 
+* []rune
+
+  rune是int32的别名，[]rune是rune数组
+
+  []rune能存储编码之后的字符串码点值
+
+  每个rune的实际占用内存由字符编码决定,utf-8编码方时rune类型占用的大小是可变的
+
+[]rune 与[]byte比较
+
+  []rune能存储所有字符集的字符，[]byte只能存储大小为一个字节的英文字符
+
+  rune类型占用的实际大小是由编码方式决定的，byte始终为一个字节
+
+  因为byte类型只能存储英文字符，所以如果字符串中包含的英文移位字符要用[]rune类型存储
+
+  string与[]rune的区别跟[]byte与字符串的区别是相似的
+
+* code
+
+.code ../rune/main.go /func main/,/^}/
