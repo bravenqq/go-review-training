@@ -6,6 +6,7 @@ import "fmt"
 func main() {
 	//计算机中存储的是字符对应码点编码之后的值
 	//在编辑器中使用设置的utf-8解码序列值展示成'a','b','c'字符
+	//只能存储英文字符
 	data := []byte{'a', 'b', 'd'}
 	fmt.Printf("data len:%d cap:%d\n", len(data), cap(data))
 	for _, c := range data {
