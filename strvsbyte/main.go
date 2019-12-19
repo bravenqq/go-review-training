@@ -29,5 +29,4 @@ func main() {
 	for index, runeValue := range sample {
 		fmt.Printf("%#U starts at byte position %d\n", runeValue, index)
 	}
-	data = []byte{16, 15, 10}
 }
