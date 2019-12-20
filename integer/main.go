@@ -49,4 +49,6 @@ func main() {
 	fmt.Printf("int64 min value:%d, max value:%d\n", Int64Min, Int64Max)
 	fmt.Printf("int min value:%d, max value:%d\n", IntMin, IntMax)
 
+	arr := make([]int, 2147483648, 2147483648)
+	fmt.Println(arr)
 }
