@@ -1,6 +1,10 @@
 package main
 
 func main() {
+	name := "nqq"
+	age := 18
+	p := newPerson(name, age)
+
 	x := make([]int, 10)
 	// escape to heap,申请的内存过大
 	y := make([]int, 20000)
@@ -14,6 +18,16 @@ func main() {
 		s += name + " "
 	}
 	f := Fibonacii
+}
+
+func newPerson(name string, age int) *Person {
+	person := Person{Name: name, Age: age}
+	return &person
+}
+
+type Person struct {
+	Name string
+	Age  int
 }
 
 // START OMIT
