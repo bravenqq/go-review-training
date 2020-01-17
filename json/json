@@ -1,0 +1,9 @@
+json: {"age":26,"name":"nieqianqian","birthday":"0114"}
+
+xml:<age>26</age>
+    <name>nieqianqian</name>
+    <birthday>0114</birthday>
+
+json:{"type":"button","width":"200","height":"300","label":"按我"}
+xml:<button width="200" height="300">按我</button>
+
