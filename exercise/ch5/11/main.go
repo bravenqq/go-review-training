@@ -67,7 +67,6 @@ func topoSort(m map[string][]string) ([]string, error) {
 	isDirected = func(item string, items []string) bool {
 		for _, it := range items {
 			if item == it {
-				fmt.Printf("%s\t%s互为前置课程\n", item, it)
 				return true
 			}
 			return isDirected(item, m[it])
