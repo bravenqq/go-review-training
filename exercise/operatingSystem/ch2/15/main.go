@@ -40,19 +40,19 @@ func main() {
 	fmt.Println("out:", out)
 
 	var outFile *os.File
-	if isFileExist(out) {
-		outFile, err = os.OpenFile(out, os.O_CREATE|os.O_RDWR, os.ModePerm)
-	} else {
-		outFile, err = os.Open(out)
-		if err != nil {
-			log.Fatalf("create out file:%s err:%v\n", out, err)
-		}
-		err = outFile.Truncate(0)
-	}
+	// if !isFileExist(out) {
+	outFile, err = os.OpenFile(out, os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0777)
+	// } else {
+	// 	outFile, err = os.Open(out)
+	// 	if err != nil {
+	// 		log.Fatalf("create out file:%s err:%v\n", out, err)
+	// 	}
+	// 	defer outFile.Close()
+	// 	err = outFile.Truncate(0)
+	// }
 	if err != nil {
-		log.Fatalf("create out file:%s err:%v\n", out, err)
+		log.Fatalf("open out file:%s err:%v\n", out, err)
 	}
-
 	defer outFile.Close()
 
 	_, err = io.Copy(outFile, inFile)
