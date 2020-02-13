@@ -121,3 +121,45 @@ func (s *IntSet) Copy() *IntSet {
 }
 
 //!-copy
+
+//!+AddAll
+//AddAll add all nums
+func (s *IntSet) AddAll(nums ...int) {
+	for _, num := range nums {
+		s.Add(num)
+	}
+}
+
+//!-AddAll
+
+//IntersectWith 交集：元素在A集合B集合均出现
+func (s *IntSet) IntersectWith(t *IntSet) {
+	for i, word := range s.words {
+		if i < len(t.words) {
+			s.words[i] = word & t.words[i]
+		} else {
+			s.words[i] = s.words[i] & 0
+		}
+	}
+}
+
+//DifferenceWith “差集：元素出现在A集合，未出现在B集合”
+func (s *IntSet) DifferenceWith(t *IntSet) {
+	//先求交集
+	t.IntersectWith(s)
+	//再用交集异或
+	for i, word := range t.words {
+		s.words[i] = s.words[i] ^ word
+	}
+}
+
+//SymmetricDifference “并差集：元素出现在A但没有出现在B，或者出现在B没有出现在A”
+func (s *IntSet) SymmetricDifference(t *IntSet) {
+	tmp := s.Copy()
+	//先求并集
+	s.UnionWith(t)
+	//再求交集
+	t.IntersectWith(tmp)
+	//再求差集
+	s.DifferenceWith(t)
+}
