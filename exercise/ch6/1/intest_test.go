@@ -167,3 +167,32 @@ func TestSymmetricDifference(t *testing.T) {
 		}
 	}
 }
+
+func TestElems(t *testing.T) {
+	s := &IntSet{}
+	s.AddAll(2, 4, 10, 8, 90)
+	tests := []struct {
+		input  *IntSet
+		output []int
+	}{
+		{s, []int{2, 4, 8, 10, 90}},
+	}
+	for _, test := range tests {
+		res := test.input.Elems()
+		if !equal(res, test.output) {
+			t.Errorf("Elems input:%s get:%v want:%v", test.input.String(), res, test.output)
+		}
+	}
+}
+
+func equal(res, out []int) bool {
+	if len(res) != len(out) {
+		return false
+	}
+	for i, v := range res {
+		if v != out[i] {
+			return false
+		}
+	}
+	return true
+}
