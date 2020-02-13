@@ -16,6 +16,7 @@ func (p Point) Sub(q Point) Point {
 type Path []Point
 
 func (path Path) TranslateBy(offset Point, add bool) {
+	//Point类型方法的方法值
 	var op func(p Point, q Point) Point
 	if add {
 		op = Point.Add
