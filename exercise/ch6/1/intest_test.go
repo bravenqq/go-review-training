@@ -9,7 +9,7 @@ func TestLen(t *testing.T) {
 		input  *IntSet
 		output int
 	}{
-		{&IntSet{words: []uint64{10, 11}}, 5},
+		{&IntSet{words: []uint{10, 11}}, 5},
 	}
 	for _, test := range tests {
 		res := test.input.Len()
