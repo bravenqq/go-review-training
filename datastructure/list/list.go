@@ -31,6 +31,7 @@ func NewLinkList() *LinkList {
 
 //Add add a node
 func (l *LinkList) Insert(n Node) {
+	//when node is the first node of linklist to add
 	if l.head == nil {
 		l.head = &n
 		l.tail = &n
@@ -44,6 +45,7 @@ func (l *LinkList) Insert(n Node) {
 
 //Remove remove a node
 func (l *LinkList) Remove(n Node) error {
+	//when n.Data is equal to head.data
 	if l.head.Data == n.Data {
 		l.head = l.head.next
 		return nil
@@ -61,6 +63,7 @@ func (l *LinkList) Remove(n Node) error {
 
 //Pop pop a node from the tail
 func (l *LinkList) Pop() (Node, error) {
+	//when pop all data of linklist
 	if l.tail.pre == nil {
 		return Node{}, ErrEmpty
 	}
