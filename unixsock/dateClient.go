@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"strings"
 )
 
 func main() {
@@ -19,6 +20,9 @@ func main() {
 		if err != nil {
 			log.Println("read err:", err)
 			return
+		}
+		if strings.Contains(string(data), "EOF") {
+			break
 		}
 		fmt.Println(string(data))
 	}
