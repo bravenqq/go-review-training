@@ -10,7 +10,7 @@ type countWriter struct {
 }
 
 func (cw *countWriter) Write(p []byte) (int, error) {
-	n, err := cw.Write(p)
+	n, err := cw.w.Write(p)
 	cw.writen += n
 	return n, err
 }
