@@ -9,6 +9,13 @@ func TestIsPalindrome(t *testing.T) {
 	}
 }
 
+func TestIsPalindromeFail(t *testing.T) {
+	s := Palindrome("aabaac")
+	if IsPalindrome(Palindrome([]byte(s))) {
+		t.Errorf("IsPalindrome is err")
+	}
+}
+
 type Palindrome []byte
 
 func (p Palindrome) Len() int {

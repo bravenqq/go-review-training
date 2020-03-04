@@ -15,8 +15,8 @@ func equal(i, j int, s sort.Interface) bool {
 func IsPalindrome(s sort.Interface) bool {
 	//check if the i and s.Len()-1-i is equal
 	max := s.Len() - 1
-	for i := 0; i < max/2; i++ {
-		if !equal(i, max-1, s) {
+	for i := 0; i < s.Len()/2; i++ {
+		if !equal(i, max-i, s) {
 			return false
 		}
 	}
