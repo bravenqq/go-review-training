@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Template</title>
+     </head>
+    <body>
+        <table>
+        <tr style='text-align: left'>
+            <th><a href="/sort/0" target="_blank">Article</a></th>
+            <th><a href="/sort/1" target="_blank">Artist</a>></th>
+            <th><a href="/sort/2" target="_blank">Album</a></th>
+            <th><a href="/sort/3" target="_blank">Year</a></th>
+            <th><a href="/sort/4" target="_blank">Length</a></th>
+        </tr>
+        {{range .}}
+        <tr>
+            <td>{{.Track.Article}}</td>
+            <td>{{.Track.Artist}}</td>
+            <td>{{.Track.Album}}</td>
+            <td>{{.Track.Year}}</td>
+            <td>{{.Track.Length}}</td>
+        </tr>
+        {{end}}
+        </table>
+    </body>
+</html>
