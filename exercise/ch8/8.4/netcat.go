@@ -24,7 +24,7 @@ func main() {
 	go func() {
 		io.Copy(os.Stdout, conn) // NOTE: ignoring errors
 		tcpCon := conn.(*net.TCPConn)
-		tcpCon.CloseWrite()
+		tcpCon.CloseRead()
 		log.Println("done")
 		done <- struct{}{} // signal the main goroutine
 	}()
@@ -42,7 +42,7 @@ func main() {
 	}
 
 	tcpCon := conn.(*net.TCPConn)
-	tcpCon.CloseRead()
+	tcpCon.CloseWrite()
 	<-done // wait for background goroutine to finish
 }
 
