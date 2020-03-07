@@ -55,11 +55,11 @@ var tmplStr = `<html>
     <body>
         <table>
         <tr>
-            <th><a href="/sort/0" target="_blank">Title</a></th>
-            <th><a href="/sort/1" target="_blank">Artist</a></th>
-            <th><a href="/sort/2" target="_blank">Album</a></th>
-            <th><a href="/sort/3" target="_blank">Year</a></th>
-            <th><a href="/sort/4" target="_blank">Length</a></th>
+			<th><a href="http://localhost:8080/sort/0" target="_blank">Title</a></th>
+            <th><a href="http://localhost:8080/sort/1" target="_blank">Artist</a></th>
+            <th><a href="http://localhost:8080/sort/2" target="_blank">Album</a></th>
+            <th><a href="http://localhost:8080/sort/3" target="_blank">Year</a></th>
+            <th><a href="http://localhost:8080/sort/4" target="_blank">Length</a></th>
         </tr>
         {{range .}}
         <tr>
