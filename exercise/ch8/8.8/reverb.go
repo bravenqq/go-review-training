@@ -47,16 +47,15 @@ func handleConn(c net.Conn) {
 	}()
 
 	timeout := 10 * time.Second
-	ticker := time.NewTicker(timeout)
+	timer := time.NewTimer(timeout)
 	for {
 		select {
-		case <-ticker.C:
+		case <-timer.C:
 			fmt.Println("time out")
-			ticker.Stop()
+			timer.Stop()
 			return
 		case text := <-lines:
-			ticker.Stop()
-			ticker = time.NewTicker(timeout)
+			timer.Reset(timeout)
 			wg.Add(1)
 			go echo(c, text, 1*time.Second)
 		}
