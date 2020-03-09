@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"strings"
 	"time"
 )
 
@@ -71,19 +72,35 @@ func handleConn(conn net.Conn) {
 	ch := make(chan string) // outgoing client messages
 	go clientWriter(conn, ch)
 
-	who := conn.RemoteAddr().String()
-	entering <- Client{name: who, c: ch}
+	ch <- "please input your name which formate is name:your name"
 
-	ch <- "You are " + who
-	messages <- who + " has arrived"
+	// messages <- who + " has arrived"
 
 	input := bufio.NewScanner(conn)
 	timeout := 10 * time.Second
 	timer := time.NewTimer(timeout)
 	msgs := make(chan string)
+	var who string
 	go func() {
 		for input.Scan() {
-			msgs <- input.Text()
+			//判断输入是否包含name
+			if strings.Contains(input.Text(), "name") {
+				//解析出名字
+				n := strings.Split(input.Text(), ":")
+				if len(n) <= 1 {
+					ch <- "please input your name use corrent formate"
+					continue
+				}
+				who = n[1]
+				//提示you are + name
+				ch <- "You are " + who
+				//entering
+				entering <- Client{name: who, c: ch}
+				//messages <- who
+				msgs <- "has arrived"
+			} else {
+				msgs <- input.Text()
+			}
 		}
 	}()
 

@@ -36,8 +36,10 @@ func broadcaster() {
 		case msg := <-messages:
 			// Broadcast incoming message to all
 			// clients' outgoing message channels.
-			for cli := range clients {
-				cli <- msg
+			for cli, c := range clients {
+				if c.status {
+					cli <- msg
+				}
 			}
 
 		case cli := <-entering:
@@ -54,7 +56,7 @@ func broadcaster() {
 		case cli := <-leaving:
 			// delete(clients, cli)
 			c := clients[cli]
-			c.status = true
+			c.status = false
 			clients[cli] = c
 			close(cli)
 		}
