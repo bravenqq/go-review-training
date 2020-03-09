@@ -1362,7 +1362,78 @@ interface{}
   断言的类型是一个具体的类型检查接口的动态类型是否和断言的类型匹配，返回类型值
   断言的对象是一个接口，判断类型是否满足接口，如果满足返回这个类型接口值
 
+* goroutine
+
+什么是goroutine
+  
+  go语言中实现并发执行的单元，使用关键字go加上要执行的操作就能实现并发执行操作的内容
+
+goroutine与gorotine之间的关系
+
+   程序启动时会创建main goroutine来执行任务，main goroutien中可以使用go关键字创建子协程并发处理任务
+
+   goroutine与gorotine之间共享IO资源，文件和全局数据。
+
+   goroutie有自己的函数堆栈
+
+   main goroutine执行完任务后会直接退出不会等待子goroutie执行完，如果main gorotine退出会回收所有资源，如果有goroutien被阻塞，则这个goroutie的资源不能回收，造成goroutie泄露
+
+   main goroutien可通过sync.WaiGorup机制或channel阻塞等待保证等待子goroutine执行完操作
+
+goroutine的作用
+    
+   当有多个cpu核时能实现在多个核上并行执行任务
+
+   并发执行需要CPU和IO等不同资源的任务，提高吞吐量
+
+   快速与用户响应交互
+
+goroutine的注意事项
+
+    不同goroutien访问共享数据时的数据一致性保护
+
+    main goroutien能等待子goroutine结束
+
+* channel
+
+什么是channel
+    
+    goroutine之间的一种通信方式
+
+操作
+    
+    发送：向channel中发送消息，如果channel中满了，发送的goroutine阻塞等待
+
+    接收：接收从channel中接收消息，如果有数据，则接收，没有则阻塞等待。如果channel关闭了可以从channel中接收零数据
+
+    关闭：在发送端goroutine中关闭channel.不能再向channel中发送数据
+
+有缓冲和无缓冲的channel分别有什么作用
+    
+    无缓冲的channel可以保证数据同步，一边发送了另一边要读取才能发送
+
+    通过适当的设定可以消除不同协程之间的效率差距
+
+select多路复用
+
+    使用select选择多路复用，能接收多种channel消息，而不阻塞goroutine
+
+
+使用channel控制goroutine的关闭
+
+    当channel关闭的时候goroutine可以从channel中立即读取零值，利用这个原理通知goroutine返回结束执行
+
+
+
+
+
  
+
+
+   
+   
+
+
 
 
   
