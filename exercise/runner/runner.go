@@ -5,6 +5,7 @@ import (
 	"errors"
 	"os"
 	"os/signal"
+	"sync"
 	"time"
 )
 
@@ -16,27 +17,42 @@ var (
 )
 
 type Runner struct {
+	worker    int
 	interrupt chan os.Signal
 	timeout   <-chan time.Time
 	complete  chan error
-	tasks     []func(int)
+	tasks     chan func(int)
+	wg        sync.WaitGroup
 }
 
-func NewRunner(d time.Duration) *Runner {
+func NewRunner(d time.Duration, worker int) *Runner {
 	return &Runner{
+		worker:    worker,
 		interrupt: make(chan os.Signal, 1),
 		timeout:   time.After(d),
 		complete:  make(chan error),
+		tasks:     make(chan func(int)),
 	}
 }
 
 func (r *Runner) Add(tasks ...func(int)) {
-	r.tasks = append(r.tasks, tasks...)
+	go func() {
+		for _, task := range tasks {
+			r.tasks <- task
+		}
+	}()
 }
 
 func (r *Runner) Start() error {
+	r.wg.Add(r.worker)
+	for i := 0; i < r.worker; i++ {
+		go func() {
+			r.complete <- r.run()
+		}()
+	}
+
 	go func() {
-		r.complete <- r.run()
+		r.wg.Wait()
 	}()
 
 	select {
@@ -48,12 +64,13 @@ func (r *Runner) Start() error {
 }
 
 func (r *Runner) run() error {
-	for id, task := range r.tasks {
+	for task := range r.tasks {
 		if r.gotInterrupt() {
 			return ErrInterrupt
 		}
-		task(id)
+		task(1)
 	}
+	r.wg.Done()
 	return nil
 }
 
