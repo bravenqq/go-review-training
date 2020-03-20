@@ -15,9 +15,3 @@ func BenchmarkFastJoin(b *testing.B) {
 		FastJoin([]string{"s", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q"})
 	}
 }
-
-func BenchmarkAdd(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		Add(1, 2)
-	}
-}
