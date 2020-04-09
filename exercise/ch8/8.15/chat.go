@@ -20,10 +20,17 @@ import (
 type client chan<- string // an outgoing message channel
 
 var (
-	entering = make(chan Client)
-	leaving  = make(chan client)
-	messages = make(chan string) // all incoming client messages
+	entering    = make(chan Client)
+	leaving     = make(chan client)
+	messages    = make(chan string)         // all incoming client messages
+	toPersonMsg = make(chan SomeoneMessage) //发送给指定客户端的message
 )
+
+type SomeoneMessage struct {
+	Receiver string
+	Sender   client
+	Message  string
+}
 
 type Client struct {
 	name   string
@@ -33,6 +40,7 @@ type Client struct {
 
 func broadcaster() {
 	clients := make(map[client]Client) // all connected clients
+	nclients := make(map[string]Client)
 	for {
 		select {
 		case msg := <-messages:
@@ -42,6 +50,11 @@ func broadcaster() {
 				if c.status {
 					cli <- msg
 				}
+			}
+		case smMsg := <-toPersonMsg:
+			cli := nclients[smMsg.Receiver]
+			if cli.status {
+				cli.c <- clients[smMsg.Sender].name + ":" + smMsg.Message
 			}
 
 		case cli := <-entering:
@@ -54,6 +67,7 @@ func broadcaster() {
 			}
 			cli.status = true
 			clients[cli.c] = cli
+			nclients[cli.name] = cli
 
 		case cli := <-leaving:
 			// delete(clients, cli)
@@ -77,7 +91,7 @@ func handleConn(conn net.Conn) {
 	// messages <- who + " has arrived"
 
 	input := bufio.NewScanner(conn)
-	timeout := 10 * time.Second
+	timeout := 60 * 5 * time.Second
 	timer := time.NewTimer(timeout)
 	msgs := make(chan string)
 	var who string
@@ -98,6 +112,10 @@ func handleConn(conn net.Conn) {
 				entering <- Client{name: who, c: ch}
 				//messages <- who
 				msgs <- "has arrived"
+			} else if strings.Contains(input.Text(), ":") {
+				msgs := strings.Split(input.Text(), ":")
+				smMsg := SomeoneMessage{msgs[0], ch, msgs[1]}
+				toPersonMsg <- smMsg
 			} else {
 				msgs <- input.Text()
 			}
