@@ -111,10 +111,10 @@ AbbyNie
 
 - debug程序各部分性能找出有问题的地方
   
-  1.使用pprof支持对程序CPU，memory，threadcreate，goroutine，block，mutex各种资源使用情况的具体分析，并且可以使用go tool pprof查看分析文件，使用它可以找出程序性能瓶颈的具体地方
+  1.trace：从整个生命周期分析各个组建的运行情况
+  2.使用pprof支持对程序CPU，memory，threadcreate，goroutine，block，mutex各种资源使用情况的具体分析，并且可以使用go tool pprof查看分析文件，使用它可以找出程序性能瓶颈的具体地方
     GraphViz还支持图形显示
-
-  2.
+  3.gdb/dlv:能暂停程序的执行，然后跟踪进程的变量值，堆栈信息，程序每一步的执行情况
 
 ** 操作系统如何给进程分配内存
 
