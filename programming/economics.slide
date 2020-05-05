@@ -1,0 +1,124 @@
+爬取可汗学院中金融学院课程资源
+
+AbbyNie
+
+2020-5-4
+
+* 金融学院课程包含什么
+
+- 课程目录
+
+- 课程内容
+
+* 课程目录
+
+- 列表页
+
+- 列表页结构体
+
+* 课程内容包含什么
+
+- 课程简介
+
+- 多媒体内容
+
+- 课程内容结构
+
+- 课程简介结构
+
+- 多媒体结构
+
+* 多媒体内容包含什么
+
+- 视屏
+
+- 音频
+
+- 字幕
+
+- 图片
+
+* 音频支持哪些语言
+
+- 中文
+
+- 英文
+
+* 字幕支持哪些语言
+
+- 中文
+
+- 英文
+
+* 结构定义
+
+- 列表页结构定义
+
+ type list struct {
+  id string
+  name string
+ }
+
+* 课程内容
+
+ type course struct {
+    introduction
+    media
+ }
+
+* 课程简介结构定义
+
+ type introduction struct {
+  id string
+  title string
+  description string
+ }
+
+* 多媒体结构定义
+    
+ type media struct {
+   id string
+   type MediaType
+   language LanguageType
+   url string
+ }
+
+ type MediaType int8
+ const (
+   Video MediaType = iota
+   Audio
+   Subtitle
+   Image
+ )
+ type LanguageType int8
+ const (
+   English LanguageType = iota
+   Chinese
+ )
+
+* 列表页如何获取？
+
+- 使用可汗学院公开restful接口获取
+
+* 课程简介如何获取？
+
+- 使用可汗学院公开restful接口获取
+
+* 多媒体下载处理流程
+
+.image download.png _ 200 
+
+* 多媒体资源如何下载
+
+- 通用URL资源下载器
+
+- 视屏下载器
+
+- 字幕下载器
+
+- 图片截取器
+
+* 如何管理各类资源的下载
+
+- 调度器
+    
