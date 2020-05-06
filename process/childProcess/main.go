@@ -10,7 +10,7 @@ import (
 func main() {
 	cmd := exec.Command("find", "/Users/abbynie")
 	//fork and exec sleep,wait sleep to finsh
-	err := cmd.Run()
+	err := cmd.Start()
 	if err != nil {
 		log.Println("err:", err)
 		fmt.Fprintln(cmd.Stderr)
@@ -19,7 +19,7 @@ func main() {
 	c := exec.Command("find", "/Users/abbynie")
 
 	//fork and exec sleep,wait sleep to finsh
-	err = c.Run()
+	err = c.Start()
 	if err != nil {
 		log.Println("err:", err)
 		fmt.Fprintln(c.Stderr)
