@@ -6,33 +6,49 @@ AbbyNie
 
 * 金融学院课程包含什么
 
-- 课程目录（列表页）
+- 课程目录
 
-- 课程内容（详细页）
+- 课程内容
 
-* 列表页包含什么
-  
-- 列表项
+* 课程目录
+
+- 列表页集合
+
+- 列表页
+
+- 列表页结构体
+
+- 列表页集合结构
 
 * 课程内容包含什么
 
-- 文字内容
+- 课程简介
 
 - 多媒体内容
 
+- 课程内容结构
+
+- 课程简介结构
+
+- 多媒体结构
+
 * 多媒体内容包含什么
 
-- 视频(mp4/webm格式)
+- 视屏
+
+- 音频
 
 - 字幕
 
 - 图片
 
-* 视屏支持哪些语言
+* 音频支持哪些语言
 
 - 中文
 
 - 英文
+
+- 中文或英文只支持一种
 
 * 字幕支持哪些语言
 
@@ -40,38 +56,41 @@ AbbyNie
 
 - 英文
 
+- 中文或英文都支持，可以切换
+
 * 结构定义
 
-- 列表页定义
+- 列表页结构定义
 
  type list struct {
-  Items []Item
+  id string
+  name string
  }
 
-- 列表项定义
+- 列表页集合结构
 
- type Item struct {
-   id   string
-   name string
+ type lists struct {
+   set []list
  }
 
-* 课程内容定义
+* 课程内容
 
- type Detail struct {
-	Content string
-	Media   string
+ type course struct {
+    introduction
+    media
  }
 
-* 文字内容定义
+* 课程简介结构定义
 
- type Content struct {
+ type introduction struct {
   id string
   title string
   description string
+  url string //视屏地址
  }
 
 * 多媒体结构定义
-    
+
  type media struct {
    id string
    type MediaType
@@ -82,6 +101,7 @@ AbbyNie
  type MediaType int8
  const (
    Video MediaType = iota
+   Audio
    Subtitle
    Image
  )
@@ -106,7 +126,7 @@ AbbyNie
 
 * 多媒体下载保存处理流程
 
-.image ./process.png _ 200 
+.image ./process.png _ 200
 
 * 各种多媒体内容如何获取
 
@@ -122,23 +142,3 @@ AbbyNie
 
 - 调度器：统一调度分派任务给各个任务处理器
 
-* 列表页获取内容方法实现
-* 列表页集合获取集合方法实现
-
- - 所有列表页组成树形结构，如下图所示
-
-.image ./tree.png _ 500
-
-- 采用广度优先遍历获取所有列表页
-
-* URL资源下载器实现
-
-* ffmpeg资源下载器实现
-
-* 上传器实现
-
-* 调度器实现
-
-* 优化
-
-- 下载器都是主要使用各种I/O资源，速度慢，如何提高下载速度
