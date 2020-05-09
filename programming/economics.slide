@@ -48,48 +48,72 @@ AbbyNie
   Items []Item
  }
 
-- 列表项定义
+* 列表项定义
 
  type Item struct {
-   id   string
-   name string
+  ID   string
+  Name string
  }
 
-* 课程内容定义
+* 详细页定义
 
  type Detail struct {
-	Content string
-	Media   string
+  Content 
+  Media   
  }
 
 * 文字内容定义
 
  type Content struct {
-  id string
-  title string
-  description string
+  ID          string
+  Title       string
+  Description string
  }
 
 * 多媒体结构定义
     
- type media struct {
-   id string
-   type MediaType
-   language LanguageType
-   url string
- }
-
- type MediaType int8
- const (
-   Video MediaType = iota
+ type Media struct {
+   Video
    Subtitle
    Image
- )
- type LanguageType int8
+ }
+
+* 视频结构定义
+ type Video struct {
+  ID       string
+  Format   FormatType
+  Language LanguageType
+  URL      string
+  }
+
+ type FormatType int8
+
  const (
-   English LanguageType = iota
-   Chinese
+  MP4 FormatType = iota
+  Webm
  )
+
+ type LanguageType int8
+
+ const (
+  Chinese LanguageType = iota
+  English
+ )
+
+* 字幕结构定义
+
+ type Subtitle struct {
+  ID       string
+  Language LanguageType
+  URL      string
+ }
+
+* 图片结构定义
+
+ type Image struct {
+  ID  string
+  URL string
+ }
 
 * 单个列表页如何获取？
 
@@ -98,7 +122,6 @@ AbbyNie
 * 如何获取所有列表页?
 
 - 给列表页集合添加获取内容方法
-
 
 * 课程简介如何获取？
 
@@ -110,35 +133,17 @@ AbbyNie
 
 * 各种多媒体内容如何获取
 
-- URL资源下载器：下载所有通过URL获取的音频,视屏等资源
+- URL资源下载器：下载所有通过URL获取的视屏资源
 
-- ffmpeg资源下载器：使用ffmpeg下载视屏,音频资源
+- ffmpeg资源获取器：使用截取封面图片
+
+- youtube-dl资源下载器：主要使用youtube id下载视屏，字幕资源
 
 * 多媒体资源如何保存
 
-- 上传器：将处理好的视屏上传到文件服务器
+- 上传器：将视屏和字幕文件上传到文件服务器
 
 * 如何管理各类资源的处理
 
 - 调度器：统一调度分派任务给各个任务处理器
 
-* 列表页获取内容方法实现
-* 列表页集合获取集合方法实现
-
- - 所有列表页组成树形结构，如下图所示
-
-.image ./tree.png _ 500
-
-- 采用广度优先遍历获取所有列表页
-
-* URL资源下载器实现
-
-* ffmpeg资源下载器实现
-
-* 上传器实现
-
-* 调度器实现
-
-* 优化
-
-- 下载器都是主要使用各种I/O资源，速度慢，如何提高下载速度
