@@ -10,16 +10,15 @@ import (
 
 func main() {
 	//启动总线
-	bus := newPubsubBus()
+	bus := pubsubBus{make([]chan<- string, 0), make(chan interface{})}
 	go bus.Run()
 
 	//订阅消息
-	messageChan := make(chan string, 1)
-	sub := subscribeEvent{messageChan}
-	bus.ReceiveEvent(sub)
+	messageChan := make(chan string, 0)
+	bus.eventChan <- subscribeEvent{messageChan}
+	bus.eventChan <- publishEvent{"welcome to here!"}
 
 	//推送消息
-	bus.ReceiveEvent(publishEvent{"welcome to here!"})
 	fmt.Println("received:", <-messageChan)
 
 }
@@ -37,14 +36,6 @@ type pubsubBus struct {
 	eventChan chan interface{}
 }
 
-func newPubsubBus() *pubsubBus {
-	return &pubsubBus{subs: make([]chan<- string, 0), eventChan: make(chan interface{})}
-}
-
-func (p *pubsubBus) ReceiveEvent(e interface{}) {
-	p.eventChan <- e
-}
-
 func (p *pubsubBus) Run() {
 	for event := range p.eventChan {
 		switch e := event.(type) {
@@ -60,11 +51,10 @@ func (p *pubsubBus) Run() {
 
 func (p *pubsubBus) handlePublishEvent(e publishEvent) {
 	for _, sub := range p.subs {
-		fmt.Println(e.message)
 		sub <- e.message
 	}
 }
 
-func (p pubsubBus) handleSubscribeEvent(e subscribeEvent) {
+func (p *pubsubBus) handleSubscribeEvent(e subscribeEvent) {
 	p.subs = append(p.subs, e.messageChan)
 }
