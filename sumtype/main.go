@@ -33,9 +33,16 @@ type publishEvent struct {
 	message string
 }
 
+type event interface {
+	isEvent()
+}
+
 type pubsubBus struct {
-	subs      []chan<- string
-	eventChan chan interface{}
+	subs []chan<- string
+	//interface{}能接受任意类型数据，导致运行时可能由于类型问题panic
+	// eventChan chan interface{}
+	//使用event约束事件类型,必须是实现了event接口
+	eventChan chan event
 }
 
 func (p *pubsubBus) Run() {
