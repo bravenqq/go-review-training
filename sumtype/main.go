@@ -4,9 +4,7 @@
  */
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func main() {
 	//启动总线
@@ -20,7 +18,6 @@ func main() {
 
 	//推送消息
 	fmt.Println("received:", <-messageChan)
-
 }
 
 type subscribeEvent struct {
@@ -28,8 +25,11 @@ type subscribeEvent struct {
 }
 
 // func (sub subscribeEvent) isEvent() {}
-func (sub subscribeEvent) visit(p *pubsubBus) {
-	p.handleSubscribeEvent(sub)
+// func (sub subscribeEvent) visit(p *pubsubBus) {
+// 	p.handleSubscribeEvent(sub)
+// }
+func (sub subscribeEvent) visit(visitor eventVisitor) {
+	visitor.visitSubscribe(sub)
 }
 
 type publishEvent struct {
@@ -37,13 +37,22 @@ type publishEvent struct {
 }
 
 // func (pub publishEvent) isEvent() {}
-func (pub publishEvent) visit(p *pubsubBus) {
-	p.handlePublishEvent(pub)
+// func (pub publishEvent) visit(p *pubsubBus) {
+// 	p.handlePublishEvent(pub)
+// }
+func (pub publishEvent) visit(visitor eventVisitor) {
+	visitor.visitPublish(pub)
 }
 
 type event interface {
 	// isEvent()
-	visit(p *pubsubBus)
+	// visit(p *pubsubBus)
+	visit(visitor eventVisitor)
+}
+
+type eventVisitor struct {
+	visitSubscribe func(sub subscribeEvent)
+	visitPublish   func(pub publishEvent)
 }
 
 type pubsubBus struct {
@@ -64,7 +73,11 @@ func (p *pubsubBus) Run() {
 		// default:
 		// 	panic("no such event")
 		// }
-		event.visit(p)
+		// event.visit(p)
+		event.visit(eventVisitor{
+			visitSubscribe: p.handleSubscribeEvent,
+			visitPublish:   p.handlePublishEvent,
+		})
 	}
 }
 
