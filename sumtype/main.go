@@ -10,7 +10,7 @@ import (
 
 func main() {
 	//启动总线
-	bus := pubsubBus{make([]chan<- string, 0), make(chan interface{})}
+	bus := pubsubBus{make([]chan<- string, 0), make(chan event)}
 	go bus.Run()
 
 	//订阅消息
@@ -29,9 +29,13 @@ type subscribeEvent struct {
 	messageChan chan<- string
 }
 
+func (sub subscribeEvent) isEvent() {}
+
 type publishEvent struct {
 	message string
 }
+
+func (pub publishEvent) isEvent() {}
 
 type event interface {
 	isEvent()
