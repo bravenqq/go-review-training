@@ -21,8 +21,6 @@ func main() {
 	//推送消息
 	fmt.Println("received:", <-messageChan)
 
-	bus.eventChan <- "test type safe"
-	<-messageChan
 }
 
 type subscribeEvent struct {
@@ -54,8 +52,8 @@ func (p *pubsubBus) Run() {
 		switch e := event.(type) {
 		case subscribeEvent:
 			p.handleSubscribeEvent(e)
-		case publishEvent:
-			p.handlePublishEvent(e)
+		// case publishEvent:
+		// 	p.handlePublishEvent(e)
 		default:
 			panic("no such event")
 		}
