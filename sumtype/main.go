@@ -36,7 +36,8 @@ type publishEvent struct {
 func (pub publishEvent) isEvent() {}
 
 type event interface {
-	isEvent()
+	// isEvent()
+	visit(p *pubsubBus)
 }
 
 type pubsubBus struct {
@@ -49,14 +50,15 @@ type pubsubBus struct {
 
 func (p *pubsubBus) Run() {
 	for event := range p.eventChan {
-		switch e := event.(type) {
-		case subscribeEvent:
-			p.handleSubscribeEvent(e)
+		// switch e := event.(type) {
+		// case subscribeEvent:
+		// p.handleSubscribeEvent(e)
 		// case publishEvent:
 		// 	p.handlePublishEvent(e)
-		default:
-			panic("no such event")
-		}
+		// default:
+		// 	panic("no such event")
+		// }
+		e.visit(p)
 	}
 }
 
