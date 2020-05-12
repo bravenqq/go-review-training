@@ -21,6 +21,8 @@ func main() {
 	//推送消息
 	fmt.Println("received:", <-messageChan)
 
+	bus.eventChan <- "test type safe"
+	<-messageChan
 }
 
 type subscribeEvent struct {
