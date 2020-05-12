@@ -27,13 +27,19 @@ type subscribeEvent struct {
 	messageChan chan<- string
 }
 
-func (sub subscribeEvent) isEvent() {}
+// func (sub subscribeEvent) isEvent() {}
+func (sub subscribeEvent) visit(p *pubsubBus) {
+	p.handleSubscribeEvent(sub)
+}
 
 type publishEvent struct {
 	message string
 }
 
-func (pub publishEvent) isEvent() {}
+// func (pub publishEvent) isEvent() {}
+func (pub publishEvent) visit(p *pubsubBus) {
+	p.handlePublishEvent(pub)
+}
 
 type event interface {
 	// isEvent()
@@ -58,7 +64,7 @@ func (p *pubsubBus) Run() {
 		// default:
 		// 	panic("no such event")
 		// }
-		e.visit(p)
+		event.visit(p)
 	}
 }
 
