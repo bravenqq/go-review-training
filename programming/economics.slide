@@ -125,15 +125,15 @@ AbbyNie
 
 * 多媒体下载保存处理流程
 
-.image ./process.png _ 200 
+.image ./download.png _ 200 
 
 * 各种多媒体内容如何获取
 
 - URL资源下载器：下载所有通过URL获取的视屏资源
 
-- ffmpeg资源获取器：使用截取封面图片
+- ffmpeg资源获取器：使用ffmpeg截取封面图片,将mp4格式视屏转成webm
 
-- youtube-dl资源下载器：主要使用youtube id下载视屏，字幕资源
+- youtube-dl资源下载器：主要使用youtube id下载字幕资源
 
 * 多媒体资源如何保存
 
