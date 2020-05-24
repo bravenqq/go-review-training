@@ -1,0 +1,123 @@
+爬取可汗学院中金融学院课程资源
+
+AbbyNie
+
+2020-5-4
+
+* 金融学院课程包含什么
+
+- 课程目录（列表页）
+
+- 课程内容（详细页）
+
+* 列表页包含什么
+  
+- 列表项
+
+* 课程内容包含什么
+
+- 文字内容
+
+- 多媒体内容
+
+* 多媒体内容包含什么
+
+- 视频(mp4/webm格式)
+
+- 字幕
+
+- 图片
+
+* 视屏支持哪些语言
+
+- 中文
+
+- 英文
+
+* 字幕支持哪些语言
+
+- 中文
+
+- 英文
+
+* 结构定义
+
+- 列表页定义
+
+ type list struct {
+  Items []Item
+ }
+
+- 列表项定义
+
+ type Item struct {
+   id   string
+   name string
+ }
+
+* 课程内容定义
+
+ type Detail struct {
+	Content string
+	Media   string
+ }
+
+* 文字内容定义
+
+ type Content struct {
+  id string
+  title string
+  description string
+ }
+
+* 多媒体结构定义
+    
+ type media struct {
+   id string
+   type MediaType
+   language LanguageType
+   url string
+ }
+
+ type MediaType int8
+ const (
+   Video MediaType = iota
+   Subtitle
+   Image
+ )
+ type LanguageType int8
+ const (
+   English LanguageType = iota
+   Chinese
+ )
+
+* 单个列表页如何获取？
+
+- 列表页添加获取内容方法
+
+* 如何获取所有列表页?
+
+- 给列表页集合添加获取内容方法
+
+* 课程简介如何获取？
+
+- 课程简介添加获取内容方法
+
+* 多媒体下载保存处理流程
+
+.image ./process.png _ 200 
+
+* 各种多媒体内容如何获取
+
+- URL资源下载器：下载所有通过URL获取的视屏资源
+
+- ffmpeg资源获取器：使用ffmpeg下载字幕资源，截取封面图片
+
+* 多媒体资源如何保存
+
+- 上传器：将视屏和字幕文件上传到文件服务器
+
+* 如何管理各类资源的处理
+
+- 调度器：统一调度分派任务给各个任务处理器
+
