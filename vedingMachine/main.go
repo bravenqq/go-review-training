@@ -42,6 +42,7 @@ func (vm *VendingMachine) giveMoney(money float32) error {
 }
 
 func (vm *VendingMachine) giveItem() error {
+	vm.itemCount -= vm.count
 	return vm.currentState.giveItem()
 }
 
@@ -101,4 +102,29 @@ func (s requestItem) giveItem() error {
 
 func (s requestItem) addItem() error {
 	return errors.New("must finish request")
+}
+
+type hasMoney struct {
+	vm *VendingMachine
+}
+
+func (s hasMoney) selectItem(count int) error {
+	return errors.New("must finish selling")
+}
+
+func (s hasMoney) giveMoney(m float32) error {
+	return errors.New("had give money")
+}
+
+func (s hasMoney) giveItem() error {
+	if s.vm.itemCount == 0 {
+		s.vm.set(s.vm.hasnoItem)
+	} else {
+		s.vm.set(s.vm.hasItem)
+	}
+	return nil
+}
+
+func (s hasMoney) addItem() error {
+	return errors.New("must finish selling")
 }
