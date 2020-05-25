@@ -1,6 +1,8 @@
 // Package main provides ...
 package main
 
+import "errors"
+
 //state 自动售卖机的行为
 type state interface {
 	selectItem(count int) error
@@ -22,6 +24,13 @@ type VendingMachine struct {
 }
 
 func (vm *VendingMachine) selectItem(count int) error {
+	if count <= 0 {
+		return errors.New("request count must >0")
+	}
+	if vm.count < count {
+		return errors.New("not enough")
+	}
+	vm.count = count
 	return vm.currentState.selectItem(count)
 }
 
@@ -43,4 +52,29 @@ func (vm *VendingMachine) set(s state) {
 
 func (vm *VendingMachine) incrmentItem(count int) {
 	vm.itemCount += count
+}
+
+type hasItem struct {
+	vm *VendingMachine
+}
+
+func (s hasItem) selectItem(count int) error {
+	s.vm.set(s.vm.ruquestItem)
+	return nil
+}
+
+func (s hasItem) giveMoney(m float32) error {
+	return errors.New("please select item first")
+}
+
+func (s hasItem) giveItem() error {
+	return errors.New("please select item first")
+}
+
+func (s hasItem) addItem(count int) error {
+	if count <= 0 {
+		return errors.New("request count must >0")
+	}
+	s.vm.incrmentItem(count)
+	return nil
 }
