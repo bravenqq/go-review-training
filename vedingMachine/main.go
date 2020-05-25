@@ -128,3 +128,25 @@ func (s hasMoney) giveItem() error {
 func (s hasMoney) addItem() error {
 	return errors.New("must finish selling")
 }
+
+type hasnoItem struct {
+	vm *VendingMachine
+}
+
+func (s hasnoItem) selectItem(count int) error {
+	return errors.New("has no item to sell")
+}
+
+func (s hasnoItem) giveMoney(m float32) error {
+	return errors.New("item out of stock")
+}
+
+func (s hasnoItem) giveItem() error {
+	return errors.New("item out of stock")
+}
+
+func (s hasnoItem) addItem(count int) error {
+	s.vm.incrmentItem(count)
+	s.vm.set(s.vm.hasItem)
+	return nil
+}
