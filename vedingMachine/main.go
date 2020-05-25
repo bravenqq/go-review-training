@@ -14,7 +14,7 @@ type state interface {
 //VendingMachine 自动售卖机，售卖商品
 type VendingMachine struct {
 	hasItem      state
-	ruquestItem  state
+	requestItem  state
 	hasMoney     state
 	hasnoItem    state
 	itemCount    int
@@ -35,6 +35,9 @@ func (vm *VendingMachine) selectItem(count int) error {
 }
 
 func (vm *VendingMachine) giveMoney(money float32) error {
+	if money < vm.itemPrice*float32(vm.count) {
+		return errors.New("not enough money")
+	}
 	return vm.currentState.giveMoney(money)
 }
 
@@ -59,7 +62,7 @@ type hasItem struct {
 }
 
 func (s hasItem) selectItem(count int) error {
-	s.vm.set(s.vm.ruquestItem)
+	s.vm.set(s.vm.requestItem)
 	return nil
 }
 
@@ -77,4 +80,25 @@ func (s hasItem) addItem(count int) error {
 	}
 	s.vm.incrmentItem(count)
 	return nil
+}
+
+type requestItem struct {
+	vm *VendingMachine
+}
+
+func (s requestItem) selectItem(count int) error {
+	return errors.New("item has select")
+}
+
+func (s requestItem) giveMoney(m float32) error {
+	s.vm.set(s.vm.hasMoney)
+	return nil
+}
+
+func (s requestItem) giveItem() error {
+	return errors.New("must give money")
+}
+
+func (s requestItem) addItem() error {
+	return errors.New("must finish request")
 }
