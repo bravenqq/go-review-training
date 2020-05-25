@@ -23,6 +23,16 @@ type VendingMachine struct {
 	currentState state
 }
 
+func NewVendingMachine(count int, price float32) *VendingMachine {
+	vm := VendingMachine{itemCount: count, itemPrice: price}
+	vm.hasItem = hasItem{&vm}
+	vm.requestItem = requestItem{&vm}
+	vm.hasMoney = hasMoney{&vm}
+	vm.hasnoItem = hasnoItem{&vm}
+	vm.currentState = vm.hasItem
+	return &vm
+}
+
 func (vm *VendingMachine) selectItem(count int) error {
 	if count <= 0 {
 		return errors.New("request count must >0")
@@ -100,7 +110,7 @@ func (s requestItem) giveItem() error {
 	return errors.New("must give money")
 }
 
-func (s requestItem) addItem() error {
+func (s requestItem) addItem(count int) error {
 	return errors.New("must finish request")
 }
 
@@ -125,7 +135,7 @@ func (s hasMoney) giveItem() error {
 	return nil
 }
 
-func (s hasMoney) addItem() error {
+func (s hasMoney) addItem(count int) error {
 	return errors.New("must finish selling")
 }
 
