@@ -21,9 +21,10 @@ func parse_student() {
 	}
 	//申明一个st变量，作用域为整个for循环
 	for _, st := range arr {
-		fmt.Printf("%T\n", st)
+		//每次循环申明初始化一个stu变量
+		stu := st
 		//循环结束，st仍被使用，放到堆中
-		students[st.name] = &st
+		students[st.name] = &stu
 	}
 
 	//st地址保存arr中最后一个数据
