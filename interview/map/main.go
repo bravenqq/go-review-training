@@ -20,11 +20,9 @@ func parse_student() {
 		{name: "nieqianqian", age: 34},
 	}
 	//申明一个st变量，作用域为整个for循环
-	for _, st := range arr {
-		//每次循环申明初始化一个stu变量
-		stu := st
+	for i := 0; i < len(arr); i++ {
 		//循环结束，st仍被使用，放到堆中
-		students[st.name] = &stu
+		students[arr[i].name] = &arr[i]
 	}
 
 	//st地址保存arr中最后一个数据
