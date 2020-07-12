@@ -17,10 +17,10 @@ func main() {
 func detectContentType(file string) string {
 
 	f, err := os.Open(file)
-	defer f.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer f.Close() // defer file.Close() must after checked err.
 	buf := make([]byte, 512)
 	fmt.Println("data:", string(buf))
 	_, err = f.Read(buf)
