@@ -2,7 +2,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"reflect"
 	"strconv"
@@ -16,6 +18,8 @@ type Movie struct {
 	Oscars          []string
 	Sequel          *string
 }
+
+var values map[reflect.Type]reflect.Value
 
 func main() {
 	// var a int64
@@ -42,7 +46,7 @@ func main() {
 	// 	fmt.Println("src:", v, " dest:", Any(v))
 	// }
 
-	display("rV", reflect.ValueOf(os.Stderr))
+	// display("rV", reflect.ValueOf(os.Stderr))
 
 	// strangelove := Movie{
 	// 	Title:    "Dr. Strangelove",
@@ -66,6 +70,82 @@ func main() {
 	// }
 
 	// display("strangelove", reflect.ValueOf(strangelove))
+
+	//reflect.Value修改值
+	// x := 2
+	// a := reflect.ValueOf(2)
+	// fmt.Println("a:", a)
+	// b := reflect.ValueOf(x)
+	// fmt.Println("b:", b)
+	// c := reflect.ValueOf(&x)
+	// fmt.Println("c:", c)
+	// d := c.Elem()
+	// fmt.Println("d:", d)
+	// fmt.Println(a.CanAddr())
+	// fmt.Println(b.CanAddr())
+	// fmt.Println(c.CanAddr())
+	// fmt.Println(d.CanAddr())
+	//通过reflect.Value 来修改变量的值
+	// px := d.Addr().Interface().(*int)
+	// *px = 3
+	// px := c.Interface().(*int)
+	// *px = 5
+	// fmt.Println("x:", x)
+	// d.Set(reflect.ValueOf(4))
+	// fmt.Println("x:", x)
+	var w1 io.Writer = os.Stdout
+	var w2 io.Writer = &bufio.Writer{}
+
+	values = make(map[reflect.Type]reflect.Value)
+	values[InterfaceOf((*io.Writer)(nil))] = reflect.ValueOf(w2)
+	values[InterfaceOf((*io.Writer)(nil))] = reflect.ValueOf(w1)
+	for k, v := range values {
+		fmt.Println("k:", k, " value:", v)
+	}
+	out := Get(InterfaceOf((*io.Writer)(nil))).Interface().(*os.File)
+	out.WriteString("hello world\n")
+	display("", reflect.ValueOf(w1))
+}
+
+func InterfaceOf(value interface{}) reflect.Type {
+	t := reflect.TypeOf(value)
+
+	for t.Kind() == reflect.Ptr {
+		t = t.Elem()
+	}
+
+	if t.Kind() != reflect.Interface {
+		panic("Called inject.InterfaceOf with a value that is not a pointer to an interface. (*MyInterface)(nil)")
+	}
+
+	return t
+}
+
+func Get(t reflect.Type) reflect.Value {
+	val := values[t]
+
+	if val.IsValid() {
+		return val
+	}
+
+	// no concrete types found, try to find implementors
+	// if t is an interface
+	if t.Kind() == reflect.Interface {
+		for k, v := range values {
+			if k.Implements(t) {
+				val = v
+				break
+			}
+		}
+	}
+
+	// // Still no type found, try to look it up on the parent
+	// if !val.IsValid() && i.parent != nil {
+	// 	val = i.parent.Get(t)
+	// }
+
+	return val
+
 }
 
 func Any(value interface{}) string {

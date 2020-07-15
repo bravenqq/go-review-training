@@ -2,6 +2,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -11,6 +12,7 @@ import (
 func main() {
 	m := martini.Classic()
 	m.Get("/", func() string {
+		fmt.Println("Hello World")
 		return "Hello World!"
 	})
 	m.Get("/report", func() (int, string) {
@@ -42,8 +44,28 @@ func main() {
 	authorize := func() bool {
 		return false
 	}
+	m.Get("/hello/:name", func(params martini.Params) string {
+		return "Hello " + params["name"]
+	})
+	m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
+		return fmt.Sprintf("Hello %s", params["name"])
+	})
 	m.Get("/secret", authorize, func() string {
 		return "secret"
+	})
+
+	m.Group("/books", func(r martini.Router) {
+		r.Get("/update/", func() string {
+			return "update"
+		})
+		r.Get("/delete/", func() string {
+			return "delete"
+		})
+	})
+	m.Group("/test", func(r martini.Router) {
+		r.Get("/values/", func() string {
+			return "values"
+		})
 	})
 
 	m.Use(func(c martini.Context, log *log.Logger) {
@@ -58,7 +80,7 @@ func main() {
 	// the service will be available to all handlers as *MyDatabase
 	// ...
 	m.Map(db)
-	m.Run()
+	m.RunOnAddr(":8080")
 }
 
 type MyDatabase struct {
