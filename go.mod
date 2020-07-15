@@ -6,6 +6,7 @@ require (
 	github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0 // indirect
 	github.com/deckarep/golang-set v1.7.1
 	github.com/go-martini/martini v0.0.0-20170121215854-22fa46961aab
+	github.com/golang/mock v1.1.1
 	github.com/golangci/golangci-lint v1.23.8 // indirect
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/securego/gosec v0.0.0-20200301204537-7525fe4bb7b0
