@@ -11,9 +11,15 @@ import (
 
 func main() {
 	m := martini.Classic()
-	m.Get("/", func() string {
-		fmt.Println("Hello World")
-		return "Hello World!"
+	// m.Use(func(req *http.Request, w http.ResponseWriter) {
+	// 	w.Write([]byte("test"))
+	// })
+	m.Get("/", func(req *http.Request, reponseWriter http.ResponseWriter) {
+		fmt.Println(req.URL.String())
+	}, func() string {
+		return "I'm fine"
+	}, func() (int, string) {
+		return 200, "It's over"
 	})
 	m.Get("/report", func() (int, string) {
 		return 418, "I'm a report"
