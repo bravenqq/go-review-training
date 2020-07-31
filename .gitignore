@@ -4,6 +4,9 @@
 *.a
 *.so
 test
+*.png
+*.jpeg
+*.jpg
 
 # Folders
 _obj
