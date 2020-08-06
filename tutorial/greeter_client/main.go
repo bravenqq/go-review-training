@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	address     = "localhost:50051"
-	defaultName = "world"
+	address     = "localhost:8080"
+	defaultName = "World"
 )
 
 func main() {
@@ -31,10 +31,10 @@ func main() {
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	r, err := c.SayHello(ctx, &pb.HelloRequest{name})
+	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
 
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
-	log.Println("Greeting %s", r.GetMessage())
+	log.Printf("Greeting %s\n", r.GetMessage())
 }
