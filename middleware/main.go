@@ -47,6 +47,7 @@ func (m *Martini) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		h(w, req)
 		m.index++
 	}
+	m.index = 0
 }
 
 func (m *Martini) Get() http.HandlerFunc {
