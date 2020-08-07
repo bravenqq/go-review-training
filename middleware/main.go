@@ -27,6 +27,35 @@ func LogHandler(h http.Handler) http.Handler {
 	})
 }
 
+type Martini struct {
+	handelrs []http.HandlerFunc
+	action   http.Handler
+	index    int
+}
+
+func (m Martini) Use(h http.HandlerFunc) {
+	m.handelrs = append(m.handelrs, h)
+}
+
+func (m Martini) Action(h http.HandlerFunc) {
+	m.action = h
+}
+
+func (m Martini) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	for m.index <= len(m.handelrs) {
+		h := m.Get()
+		h(w, req)
+		m.index++
+	}
+}
+
+func (m Martini) Get() http.HandlerFunc {
+	if m.index < len(m.handelrs) {
+		return m.handelrs[m.index]
+	}
+	return m.action.ServeHTTP
+}
+
 func main() {
 	addr := flag.String("addr", ":8080", "please input addr")
 	mux := http.NewServeMux()
@@ -35,6 +64,7 @@ func main() {
 	}))
 	mux.Handle("/hello", LogHandler(Person{"nqq"}))
 	log.Println("start server addr ", *addr)
+
 	log.Fatal(http.ListenAndServe(*addr, mux))
 }
 
