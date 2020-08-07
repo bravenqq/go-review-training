@@ -33,15 +33,15 @@ type Martini struct {
 	index    int
 }
 
-func (m Martini) Use(h http.HandlerFunc) {
+func (m *Martini) Use(h http.HandlerFunc) {
 	m.handelrs = append(m.handelrs, h)
 }
 
-func (m Martini) Action(h http.HandlerFunc) {
+func (m *Martini) Action(h http.Handler) {
 	m.action = h
 }
 
-func (m Martini) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+func (m *Martini) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	for m.index <= len(m.handelrs) {
 		h := m.Get()
 		h(w, req)
@@ -49,23 +49,35 @@ func (m Martini) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (m Martini) Get() http.HandlerFunc {
+func (m *Martini) Get() http.HandlerFunc {
 	if m.index < len(m.handelrs) {
 		return m.handelrs[m.index]
 	}
 	return m.action.ServeHTTP
 }
 
+func NewMartini() *Martini {
+	return &Martini{}
+}
+
 func main() {
 	addr := flag.String("addr", ":8080", "please input addr")
 	mux := http.NewServeMux()
-	mux.HandleFunc("/index", Log(func(w http.ResponseWriter, req *http.Request) {
+	mux.HandleFunc("/index", func(w http.ResponseWriter, req *http.Request) {
 		w.Write([]byte("hello world"))
-	}))
-	mux.Handle("/hello", LogHandler(Person{"nqq"}))
-	log.Println("start server addr ", *addr)
+	})
+	mux.Handle("/hello", Person{"nqq"})
 
-	log.Fatal(http.ListenAndServe(*addr, mux))
+	m := NewMartini()
+	m.Use(func(w http.ResponseWriter, req *http.Request) {
+		log.Println("request url:", req.URL.String())
+		start := time.Now()
+		log.Println("spend time:", time.Now().Sub(start))
+	})
+	m.Action(mux)
+
+	log.Println("start server addr ", *addr)
+	log.Fatal(http.ListenAndServe(*addr, m))
 }
 
 type Person struct {
