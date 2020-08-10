@@ -4,13 +4,16 @@
 *.a
 *.so
 test
+*.png
+*.jpeg
+*.jpg
 
 # Folders
 _obj
 _test
 
 # Architecture specific extensions/prefixes
-*.[568vq]
+# *.[568vq]
 [568vq].out
 
 *.cgo1.go
@@ -25,3 +28,21 @@ _testmain.go
 *.test
 *.prof
 
+./exercise/ch9/9.6/crawl
+./exercise/ch4/10/issues/issues
+./exercise/ch4/issues/issues
+./exercise/ch5/17/main
+./exercise/ch5/1/fetch
+./exercise/ch8/8.1/server
+./exercise/ch8/8.1/client
+./exercise/ch5/4/findlinks
+./exercise/ch5/2/counts
+./exercise/ch5/1/findlinks
+./exercise/ch5/3/finddata
+./exercise/ch8/8.9/du
+./exercise/ch4/9/findlinks1
+./bufio/main
+./byte/byte
+./exercise/ch3/3/10/main
+./exercise/ch5/9/main
+./exercise/algoritm/ch4/sumarr/main

@@ -23,12 +23,14 @@ func main() {
 	fmt.Printf("company alignBoundary:%d size:%d\n", unsafe.Alignof(company), unsafe.Sizeof(company))
 }
 
+//Example example
 type Example struct {
 	BoolValue  bool
 	FloatValue float32
 	IntValue   int16
 }
 
+//Company company
 type Company struct {
 	BoolValue bool
 	Name      string

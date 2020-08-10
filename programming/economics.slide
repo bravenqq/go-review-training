@@ -1,0 +1,145 @@
+爬取可汗学院中金融学院课程资源
+
+AbbyNie
+
+2020-5-4
+
+* 金融学院课程包含什么
+
+- 课程目录（列表页）
+
+- 课程内容（详细页）
+
+* 列表页包含什么
+  
+- 列表项
+
+* 课程内容包含什么
+
+- 文字内容
+
+- 多媒体内容
+
+* 多媒体内容包含什么
+
+- 视频(mp4/webm格式)
+
+- 字幕
+
+- 图片
+
+* 视屏支持哪些语言
+
+- 中文
+
+- 英文
+
+* 字幕支持哪些语言
+
+- 中文
+
+- 英文
+
+* 结构定义
+
+- 列表页定义
+
+ type list struct {
+  Items []Item
+ }
+
+* 列表项定义
+
+ type Item struct {
+  ID   string
+  Name string
+ }
+
+* 详细页定义
+
+ type Detail struct {
+  Content 
+  Media   
+ }
+
+* 文字内容定义
+
+ type Content struct {
+  ID          string
+  Title       string
+  Description string
+ }
+
+* 多媒体结构定义
+    
+ type Media struct {
+   Video
+   Subtitle
+   Image
+ }
+
+* 视频结构定义
+ type Video struct {
+  ID       string
+  Format   FormatType
+  Language LanguageType
+  URL      string
+  }
+
+ type FormatType int8
+
+ const (
+  MP4 FormatType = iota
+  Webm
+ )
+
+ type LanguageType int8
+
+ const (
+  Chinese LanguageType = iota
+  English
+ )
+
+* 字幕结构定义
+
+ type Subtitle struct {
+  ID       string
+  Language LanguageType
+  URL      string
+ }
+
+* 图片结构定义
+
+ type Image struct {
+  ID  string
+  URL string
+ }
+
+* 列表页如何获取？
+
+- 设计ListCrawler爬取器：实现并发爬取列表页
+
+* 详细内容页如何获取？
+
+- 设计ContentCrawler爬取器：并发爬取详细页
+
+* 多媒体下载保存处理流程
+
+.image ./download.png _ 200 
+
+* 各种多媒体内容如何获取
+
+- URL资源下载器：下载所有通过URL获取的视屏资源
+
+- ffmpeg资源获取器：使用ffmpeg截取封面图片,将mp4格式视屏转成webm
+
+- youtube-dl资源下载器：主要使用youtube id下载字幕资源
+
+* 多媒体资源如何保存
+
+- 上传器：将视屏和字幕文件上传到文件服务器
+
+* 如何管理各类资源的处理
+
+- 调度器：统一调度分派任务给各个任务处理器
+

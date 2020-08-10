@@ -1,0 +1,91 @@
+爬取可汗学院金融学院课程资源
+
+AbbyNie
+
+2020-5-4
+
+* 金融学院课程包含什么
+
+- 课程目录
+
+- 课程内容
+
+* 课程目录是什么
+
+- 列表页
+
+
+* 课程内容包含什么
+
+- 课程文字简介
+
+- 多媒体内容
+
+* 多媒体内容包含什么
+
+- 视屏
+
+- 音频
+
+- 字幕
+
+- 图片
+
+* 音频支持哪些语言
+
+- 中文
+
+- 英文
+
+* 字幕支持哪些语言
+
+- 中文
+
+- 英文
+
+* 结构定义
+
+- 列表页结构定义
+
+ type list struct {
+  id string
+  name string
+ }
+
+* 课程简介结构定义
+
+ type course struct {
+  id string
+  title string
+  description string
+ }
+
+* 多媒体结构定义
+    
+ type media struct {
+   id string
+   type MediaType
+   language LanguageType
+   url string
+ }
+ type MediaType int8
+ const (
+   mediaType MediaType = iota
+   Video
+   Audio
+   Image
+ )
+ type LanguageType int8
+ const (
+   languageType LanguageType = iota
+   English
+   Chinese
+ )
+
+
+* 列表页如何获取？
+
+* 多媒体下载处理流程
+
+.image download.png _ 200 
+    
