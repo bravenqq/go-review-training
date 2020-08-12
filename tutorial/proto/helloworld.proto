@@ -4,6 +4,7 @@ option go_package=".;helloworld";
 
 service Greeter {
     rpc SayHello (HelloRequest) returns (HelloReplay) {}
+    rpc SayHelloAgain (HelloRequest) returns (HelloReplay) {}
 }
 
 message HelloRequest {
