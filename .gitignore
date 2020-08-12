@@ -4,6 +4,8 @@
 *.a
 *.so
 test
+client
+server
 *.png
 *.jpeg
 *.jpg
