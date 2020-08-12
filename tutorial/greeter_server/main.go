@@ -2,9 +2,11 @@
 package main
 
 import (
-	"context"
+	"io"
 	"log"
 	"net"
+	"strconv"
+	"strings"
 
 	"google.golang.org/grpc"
 	pb "iohttps.com/nqq/go-review-training/tutorial/helloworld"
@@ -18,13 +20,29 @@ type server struct {
 	pb.UnimplementedGreeterServer
 }
 
-func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReplay, error) {
+func (s *server) SayHello(in *pb.HelloRequest, gs pb.Greeter_SayHelloServer) error {
 	log.Println("Received:", in.GetName())
-	return &pb.HelloReplay{Message: "Hello" + in.GetName()}, nil
+	name := in.Name
+	for i := 0; i < 100; i++ {
+		gs.Send(&pb.HelloReplay{Message: "Hello " + name + strconv.Itoa(i)})
+	}
+	return nil
 }
 
-func (s *server) SayHelloAgain(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReplay, error) {
-	return &pb.HelloReplay{Message: "Hello again" + in.GetName()}, nil
+func (s *server) SayHelloAgain(gs pb.Greeter_SayHelloAgainServer) error {
+	var names []string
+	for {
+		in, err := gs.Recv()
+		if err == io.EOF {
+			gs.SendAndClose(&pb.HelloReplay{Message: "Hello " + strings.Join(names, ",")})
+			return nil
+		}
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+		names = append(names, in.Name)
+	}
 }
 
 func main() {
