@@ -19,6 +19,8 @@ func main() {
 	subStr = "hi,nqq"
 	fmt.Printf("subStr %s, str %s\n", subStr, str)
 
+	str = string([]byte{2, 3})
+	fmt.Println(str)
 	//改变字符串底层值，报错cannot assign to subStr[:5]
 	//subStr[:5] = "hi"
 }
