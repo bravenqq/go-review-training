@@ -45,6 +45,20 @@ func (s *server) SayHelloAgain(gs pb.Greeter_SayHelloAgainServer) error {
 	}
 }
 
+func (s *server) SayHelloAgainAll(gs pb.Greeter_SayHelloAgainAllServer) error {
+	for {
+		in, err := gs.Recv()
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			log.Println("failed to recv:", err)
+			return err
+		}
+		gs.Send(&pb.HelloReplay{Message: "Hello " + in.Name})
+	}
+}
+
 func main() {
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
