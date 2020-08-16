@@ -48,3 +48,6 @@ _testmain.go
 ./exercise/ch3/3/10/main
 ./exercise/ch5/9/main
 ./exercise/algoritm/ch4/sumarr/main
+
+# Darwin
+.DS_Store
