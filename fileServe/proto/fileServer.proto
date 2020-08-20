@@ -1,0 +1,15 @@
+syntax = "proto3";
+package file;
+option go_package=".;file";
+
+service FileServe {
+    rpc ServeContent (ServeContentRequest) returns (stream chunk){}
+}
+
+message ServeContentRequest {
+    string path = 1;
+}
+
+message chunk {
+   bytes Content = 1; 
+}
