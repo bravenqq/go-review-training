@@ -44,17 +44,17 @@ func main() {
 		return 404, "not found"
 	})
 
-	m.Get("/hello/**", func(params martini.Params) string {
+	m.Get("/hello1/**", func(params martini.Params) string {
 		return "hello " + params["_1"]
 	})
 	authorize := func() bool {
 		return false
 	}
-	m.Get("/hello/:name", func(params martini.Params) string {
+	m.Get("/hello2/:name", func(params martini.Params) string {
 		return "Hello " + params["name"]
 	})
-	m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
-		return fmt.Sprintf("Hello %s", params["name"])
+	m.Get("/hello3/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
+		return fmt.Sprintf("Hello:%s", params["name"])
 	})
 	m.Get("/secret", authorize, func() string {
 		return "secret"
