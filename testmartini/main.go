@@ -86,6 +86,7 @@ func main() {
 	// the service will be available to all handlers as *MyDatabase
 	// ...
 	m.Map(db)
+	fmt.Println(martini.Env)
 	m.RunOnAddr(":8080")
 }
 
