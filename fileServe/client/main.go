@@ -39,6 +39,6 @@ func main() {
 			log.Println("recv err:", err)
 			return
 		}
-		fmt.Println(string(data.GetContent()))
+		fmt.Print(string(data.GetContent()))
 	}
 }

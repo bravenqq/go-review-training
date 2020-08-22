@@ -1,8 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"flag"
-	"io/ioutil"
+	"io"
 	"log"
 	"net"
 	"os"
@@ -48,11 +49,15 @@ func (s *server) ServeContent(r *pb.ServeContentRequest, fs pb.FileServe_ServeCo
 }
 
 func writeContent(fs pb.FileServe_ServeContentServer, f *os.File) error {
-	data, err := ioutil.ReadAll(f)
-	if err != nil {
-		return err
+	r := bufio.NewReader(f)
+	buf := make([]byte, 100)
+	for {
+		n, err := r.Read(buf)
+		if err == io.EOF {
+			break
+		}
+		fs.Send(&pb.Chunk{Content: buf[:n]})
 	}
-	fs.Send(&pb.Chunk{Content: data})
 	return nil
 }
 
