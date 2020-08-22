@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -16,13 +17,15 @@ const (
 )
 
 func main() {
+	file := flag.String("file", "main.go", "please input file")
+	flag.Parse()
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer conn.Close()
 	c := pb.NewFileServeClient(conn)
-	fc, err := c.ServeContent(context.Background(), &pb.ServeContentRequest{Path: "main.go"})
+	fc, err := c.ServeContent(context.Background(), &pb.ServeContentRequest{Path: *file})
 	if err != nil {
 		log.Println(err)
 		return
@@ -36,6 +39,6 @@ func main() {
 			log.Println("recv err:", err)
 			return
 		}
-		fmt.Println(data.String())
+		fmt.Println(string(data.GetContent()))
 	}
 }
