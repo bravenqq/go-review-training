@@ -2,10 +2,10 @@
 package main
 
 import (
+	"context"
 	"io"
 	"log"
 	"net"
-	"strconv"
 	"strings"
 
 	"google.golang.org/grpc"
@@ -20,13 +20,10 @@ type server struct {
 	pb.UnimplementedGreeterServer
 }
 
-func (s *server) SayHello(in *pb.HelloRequest, gs pb.Greeter_SayHelloServer) error {
+func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReplay, error) {
 	log.Println("Received:", in.GetName())
 	name := in.Name
-	for i := 0; i < 100; i++ {
-		gs.Send(&pb.HelloReplay{Message: "Hello " + name + strconv.Itoa(i)})
-	}
-	return nil
+	return &pb.HelloReplay{Message: "Hello " + name}, nil
 }
 
 func (s *server) SayHelloAgain(gs pb.Greeter_SayHelloAgainServer) error {

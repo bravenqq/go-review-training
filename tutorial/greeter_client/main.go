@@ -4,6 +4,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"strconv"
@@ -43,31 +44,31 @@ func main() {
 		fmt.Println("Greeting:", reply.Message)
 	}
 	sm.CloseSend()
-	// sm, err := c.SayHelloAgain(context.Background())
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// for i := 0; i < 100; i++ {
-	// 	sm.Send(&pb.HelloRequest{Name: name + strconv.Itoa(i)})
-	// }
-	// reply, err := sm.CloseAndRecv()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// fmt.Println("Greeting:", reply.Message)
-	// r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
-	//
-	// if err != nil {
-	// 	log.Fatalf("could not greet: %v", err)
-	// }
-	// for {
-	// 	reply, err := r.Recv()
-	// 	if err == io.EOF {
-	// 		break
-	// 	}
-	// 	if err != nil {
-	// 		log.Println("faild to rec:", err)
-	// 	}
-	// 	fmt.Println("Greeting:", reply.Message)
-	// }
+	sm, err = c.SayHelloAgain(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+	for i := 0; i < 100; i++ {
+		sm.Send(&pb.HelloRequest{Name: name + strconv.Itoa(i)})
+	}
+	reply, err := sm.CloseAndRecv()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Greeting:", reply.Message)
+	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
+
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+	for {
+		reply, err := r.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Println("faild to rec:", err)
+		}
+		fmt.Println("Greeting:", reply.Message)
+	}
 }
