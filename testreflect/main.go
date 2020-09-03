@@ -2,10 +2,7 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"io"
-	"os"
 	"reflect"
 	"strconv"
 )
@@ -93,18 +90,37 @@ func main() {
 	// fmt.Println("x:", x)
 	// d.Set(reflect.ValueOf(4))
 	// fmt.Println("x:", x)
-	var w1 io.Writer = os.Stdout
-	var w2 io.Writer = &bufio.Writer{}
+	// var w1 io.Writer = os.Stdout
+	// var w2 io.Writer = &bufio.Writer{}
+	//
+	// values = make(map[reflect.Type]reflect.Value)
+	// values[InterfaceOf((*io.Writer)(nil))] = reflect.ValueOf(w2)
+	// values[InterfaceOf((*io.Writer)(nil))] = reflect.ValueOf(w1)
+	// for k, v := range values {
+	// 	fmt.Println("k:", k, " value:", v)
+	// }
+	// out := Get(InterfaceOf((*io.Writer)(nil))).Interface().(*os.File)
+	// out.WriteString("hello world\n")
+	// display("", reflect.ValueOf(w1))
 
-	values = make(map[reflect.Type]reflect.Value)
-	values[InterfaceOf((*io.Writer)(nil))] = reflect.ValueOf(w2)
-	values[InterfaceOf((*io.Writer)(nil))] = reflect.ValueOf(w1)
-	for k, v := range values {
-		fmt.Println("k:", k, " value:", v)
+	values := Invoke(Interger(4), "Add", 5)
+	for _, v := range values {
+		fmt.Println(v.Int())
 	}
-	out := Get(InterfaceOf((*io.Writer)(nil))).Interface().(*os.File)
-	out.WriteString("hello world\n")
-	display("", reflect.ValueOf(w1))
+}
+
+type Interger int
+
+func (a Interger) Add(b int) int {
+	return int(a) + b
+}
+
+func Invoke(any interface{}, name string, args ...interface{}) []reflect.Value {
+	inputs := make([]reflect.Value, len(args))
+	for i, _ := range args {
+		inputs[i] = reflect.ValueOf(args[i])
+	}
+	return reflect.ValueOf(any).MethodByName(name).Call(inputs)
 }
 
 func InterfaceOf(value interface{}) reflect.Type {
