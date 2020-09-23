@@ -15,6 +15,7 @@ func main() {
 	// 	w.Write([]byte("test"))
 	// })
 	m.Get("/", func(req *http.Request, reponseWriter http.ResponseWriter) {
+		fmt.Println(req.Header.Get("User-Agent"))
 		fmt.Println(req.URL.String())
 	}, func() string {
 		return "I'm fine"

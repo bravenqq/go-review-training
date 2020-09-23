@@ -12,7 +12,8 @@ func main() {
 	flag.Parse()
 	router := http.NewServeMux()
 	router.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		http.Redirect(w, req, "http://127.0.0.1:8088/"+req.RequestURI, http.StatusMovedPermanently)
+		log.Println(req.Header.Get("user-agent"))
+		http.Redirect(w, req, "http://192.168.10.54:8088/"+req.RequestURI, http.StatusMovedPermanently)
 	}))
 	server := http.Server{
 		Addr:    ":8080",
@@ -30,7 +31,7 @@ func main() {
 	log.Println("listen port 8088")
 	err := http.ListenAndServe(":8088", http.FileServer(http.Dir(*ph)))
 	if err != nil {
-		log.Fatal("listen port:8090 err:", err)
+		log.Fatal("listen port:8088 err:", err)
 	}
 
 }
