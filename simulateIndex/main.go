@@ -7,7 +7,10 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"strconv"
 	"time"
+
+	"github.com/go-martini/martini"
 )
 
 /*
@@ -20,7 +23,7 @@ import (
 */
 
 const (
-	size = 1000
+	size = 100000
 )
 
 func init() {
@@ -48,8 +51,7 @@ func main() {
 	articles := make([]Article, 0, size)
 	start := time.Now()
 	for i := 0; i < size; i++ {
-		r := rand.New(rand.NewSource(time.Now().UnixNano()))
-		a := Article{ID: r.Intn(10000), Content: RandStringRunes(20), UserID: r.Intn(200)}
+		a := Article{ID: rand.Intn(size), Content: RandStringRunes(50), UserID: rand.Intn(size / 10)}
 		articles = append(articles, a)
 	}
 	fmt.Println("generate take:", time.Now().Sub(start))
@@ -67,4 +69,81 @@ func main() {
 	defer f.Close()
 	f.Write(data)
 	fmt.Println("write take:", time.Now().Sub(start))
+
+	m := martini.Classic()
+	// idIndexs := sortID(articles)
+	// // 通过Id查找
+	//
+	// m.Group("/index/articles", func(r martini.Route){
+	// 	m.Get("/detail/:id", func(params martini.Params) (int, string) {
+	// 		id := params["id"]
+	// 		ID, err := strconv.Atoi(id)
+	// 		if err != nil {
+	// 			log.Println(err)
+	// 			return 503, ""
+	// 		}
+	// 		index,err:=quickFind(idIndexs,ID)
+	// 		if err != nil{
+	// 		return 405, ""
+	// 		}
+	// })
+
+	m.Group("/articles", func(r martini.Router) {
+		m.Get("/detail/:id", func(params martini.Params) (int, string) {
+			id := params["id"]
+			ID, err := strconv.Atoi(id)
+			if err != nil {
+				log.Println(err)
+				return 503, ""
+			}
+			for _, a := range articles {
+				if a.ID == ID {
+					return 200, a.Content
+				}
+			}
+			return 405, ""
+		})
+		m.Get("/:id", func(params martini.Params) (int, string) {
+			id := params["id"]
+			ID, err := strconv.Atoi(id)
+			if err != nil {
+				log.Println(err)
+				return 503, ""
+			}
+			var arts []Article
+			for _, a := range articles {
+				if a.ID == ID {
+					arts = append(arts, a)
+				}
+			}
+			data, err := json.Marshal(arts)
+			if err != nil {
+				log.Println(err)
+				return 503, ""
+			}
+			return 200, string(data)
+		})
+		m.Get("/search/:userID", func(params martini.Params) (int, string) {
+			uid := params["userID"]
+			UID, err := strconv.Atoi(uid)
+			if err != nil {
+				log.Println(err)
+				return 503, ""
+			}
+			var arts []Article
+			for _, a := range articles {
+				if a.UserID == UID {
+					arts = append(arts, a)
+				}
+			}
+			data, err := json.Marshal(arts)
+			if err != nil {
+				log.Println(err)
+				return 503, ""
+			}
+			return 200, string(data)
+
+		})
+	})
+	m.RunOnAddr(":8080")
 }
