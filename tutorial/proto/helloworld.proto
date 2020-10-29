@@ -3,7 +3,7 @@ package helloworld;
 option go_package=".;helloworld";
 
 service Greeter {
-    rpc SayHello (HelloRequest) returns (HelloReplay) {}
+    rpc SayHello (HelloRequest) returns (stream HelloReplay) {}
     rpc SayHelloAgain (stream HelloRequest) returns (HelloReplay) {}
     rpc SayHelloAgainAll (stream HelloRequest) returns (stream HelloReplay){}
 }
