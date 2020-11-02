@@ -13,7 +13,6 @@ import (
 	"log"
 	"net"
 	"strings"
-	"time"
 )
 
 //!+broadcaster
@@ -77,8 +76,8 @@ func handleConn(conn net.Conn) {
 	// messages <- who + " has arrived"
 
 	input := bufio.NewScanner(conn)
-	timeout := 10 * time.Second
-	timer := time.NewTimer(timeout)
+	// timeout := 10 * time.Second
+	// timer := time.NewTimer(timeout)
 	msgs := make(chan string)
 	var who string
 	go func() {
@@ -108,9 +107,9 @@ func handleConn(conn net.Conn) {
 		select {
 		case message := <-msgs:
 			messages <- who + ": " + message
-			timer.Reset(timeout)
-		case <-timer.C:
-			timer.Stop()
+			// timer.Reset(timeout)
+			// case <-timer.C:
+			// 	timer.Stop()
 			leaving <- ch
 			messages <- who + " has time out"
 			conn.Close()

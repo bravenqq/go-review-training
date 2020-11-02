@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"net"
 	"os"
@@ -20,8 +21,11 @@ func main() {
 		}
 		// defer con.Close()
 		// _, err = con.Write([]byte("hi,nqq\n"))
+
+		read := bufio.NewReader(os.Stdin)
+		test := "test"
 		go func() {
-			read := bufio.NewReader(os.Stdin)
+			fmt.Println(test)
 			for {
 				line, _, err := read.ReadLine()
 				if err != nil {
