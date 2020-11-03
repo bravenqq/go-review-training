@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"os"
@@ -78,31 +79,43 @@ func sortID(arr []Article) []IDIndex {
 
 func main() {
 
-	articles := make([]Article, 0, size)
+	// articles := make([]Article, 0, size)
 	start := time.Now()
-	for i := 0; i < size; i++ {
-		a := Article{ID: rand.Intn(size), Content: RandStringRunes(50), UserID: rand.Intn(size / 10)}
-		articles = append(articles, a)
-	}
-	fmt.Println("generate take:", time.Now().Sub(start))
-	start = time.Now()
-	data, err := json.Marshal(articles)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("marsh take:", time.Now().Sub(start))
-	start = time.Now()
+	// for i := 0; i < size; i++ {
+	// 	a := Article{ID: rand.Intn(size), Content: RandStringRunes(50), UserID: rand.Intn(size / 10)}
+	// 	articles = append(articles, a)
+	// }
+	// fmt.Println("generate take:", time.Now().Sub(start))
+	// start = time.Now()
+	// data, err := json.Marshal(articles)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Println("marsh take:", time.Now().Sub(start))
+	// start = time.Now()
 	f, err := os.OpenFile("resource", os.O_RDWR|os.O_CREATE|os.O_APPEND, os.ModePerm)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer f.Close()
-	f.Write(data)
-	fmt.Println("write take:", time.Now().Sub(start))
+	// defer f.Close()
+	// f.Write(data)
+	data, err := ioutil.ReadAll(f)
+	if err != nil {
+		log.Fatal("read all:", err)
+	}
+	fmt.Println("read take:", time.Now().Sub(start))
+
+	start = time.Now()
+	var articles []Article
+	err = json.Unmarshal(data, &articles)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("unmarshal err:", err)
+	fmt.Println("unmarshal take:", time.Now().Sub(start))
 
 	m := martini.Classic()
 	idIndexs := sortID(articles)
-	fmt.Println(idIndexs)
 	// 通过Id查找
 	m.Group("/index/articles", func(r martini.Router) {
 		m.Get("/detail/:id", func(params martini.Params) (int, string) {
@@ -115,11 +128,7 @@ func main() {
 
 			var quickFind func(arr []IDIndex, ID int) (int, error)
 			quickFind = func(arr []IDIndex, ID int) (int, error) {
-				if len(arr) == 0 {
-					return 0, errors.New("找不到")
-				}
 				mid := (len(arr) - 1) / 2
-				fmt.Println("mid:", mid)
 				if arr[mid].ID == ID {
 					return arr[mid].Position, nil
 				}
@@ -129,18 +138,15 @@ func main() {
 						return 0, errors.New("找不到")
 					}
 					arr = arr[mid:]
-				}
-
-				if ID < arr[mid].ID {
+				} else {
 					if mid < 0 {
 						return 0, errors.New("找不到")
 					}
 					arr = arr[0:mid]
 				}
-				quickFind(arr, ID)
-				return 0, errors.New("找不到")
-			}
 
+				return quickFind(arr, ID)
+			}
 			index, err := quickFind(idIndexs, ID)
 
 			if err != nil {
