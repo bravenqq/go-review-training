@@ -1,7 +1,11 @@
 // Package main provides ...
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+	"log"
+)
 
 /*
 选择排序
@@ -44,6 +48,32 @@ func main() {
 	array := Array{10, 20, 15, 30, 22, 43, 33}
 	sort(array)
 	fmt.Println(array)
+	var binaryFind func(arr []int, num int, stat, end int) (int, error)
+	binaryFind = func(arr []int, num int, start, end int) (int, error) {
+		mid := (start + end) / 2
+		if mid < 0 || mid >= len(arr) {
+			return 0, errors.New("没找到")
+		}
+
+		if arr[mid] == num {
+			return mid, nil
+		}
+		if arr[mid] < num {
+			start = mid + 1
+		}
+		if arr[mid] > num {
+			end = mid - 1
+		}
+
+		return binaryFind(arr, num, start, end)
+	}
+
+	index, err := binaryFind(array, 30, 0, len(array)-1)
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println("index:", index)
+
 }
 
 func sort(arr Sorter) {
