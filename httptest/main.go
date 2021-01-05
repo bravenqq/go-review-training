@@ -13,7 +13,8 @@ func main() {
 	router := http.NewServeMux()
 	router.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		log.Println(req.Header.Get("user-agent"))
-		http.Redirect(w, req, "http://192.168.10.54:8088/"+req.RequestURI, http.StatusMovedPermanently)
+		log.Println(req.Header.Get("Remote Address"))
+		http.Redirect(w, req, "http://192.168.10.57:8088/"+req.RequestURI, http.StatusMovedPermanently)
 	}))
 	server := http.Server{
 		Addr:    ":8080",
@@ -29,7 +30,7 @@ func main() {
 
 	// http.Handle("/files/", http.StripPrefix("/files/", http.FileServer(http.Dir("./"))))
 	log.Println("listen port 8088")
-	err := http.ListenAndServe(":8088", http.FileServer(http.Dir(*ph)))
+	err := http.ListenAndServe("0.0.0.0:8088", http.FileServer(http.Dir(*ph)))
 	if err != nil {
 		log.Fatal("listen port:8088 err:", err)
 	}
