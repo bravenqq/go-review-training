@@ -1,8 +1,13 @@
 // Package main provides ...
 package main
 
-func main() {
+import "fmt"
 
+func main() {
+	var s []int
+	fmt.Printf("%p\n", &s)
+	fmt.Printf("len:%d cap:%d\n", len(s), cap(s))
+	fmt.Println(s[0])
 }
 
 func Join(slice []string, str string) string {

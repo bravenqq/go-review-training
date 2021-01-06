@@ -30,18 +30,6 @@ Dec,30 2020
 
 - 高速编译
 
-## Why go
-
-- 编译速度
-
-- 高效快速的开发
-
-- 高并发
-
-- 分布式系统
-
-- 多核网络硬件
-
 ## 设计原则
 
 - 保持正交
@@ -54,27 +42,71 @@ foo.Foo *myFoo = new foo.Foo(foo.FOO_INIT) //what's the problem
 
 - 减少输入，尽量让语言解决问题，保持类型系统清晰，没有类型层次结构（是指继承吗？）
 
-## 怎么做到
+## 怎么做到高效的开发
 
-- 基本原理（Fundamentals）
+### 基本原理（Fundamentals）
 
-1. 简洁的语法
+### 简洁的语法
 
-2. 轻量型类型系统
+1. 语言的关键字是所有语言中最少的
 
-3. 没有隐式转换：保持明确
+```
+example
+package main
 
-4. 无类型的未调整大小的常数：不再为 0x80ULL
+import (
+    "fmt"
+    "http"
+)
 
-5. 严格分离接口和实现
+func handler(c *http.Conn, r *http.Request) {
+    fmt.Fprintf(c, "Hello, %s.", r.URL.Path[1:])
+}
+func main() {
+    http.ListenAndServe(":8080",
+        http.HandlerFunc(handler))
+}
+```
+
+2. 类型声明简洁清晰，具有类型推断
+
+3. 轻量型类型系统
+
+4. 没有隐式转换：保持明确
+
+5. 无类型的未调整大小的常数：不再为 0x80ULL
+
+6. 结构体的数据和方法是分离的
+
+7. 严格分离接口和实现,接口隐试满足
+
+8. 包的可见不可见通过大小写区分
+
+- 提供许多依赖包
+
+- 工具链
+
+1. godoc
+
+2. gofmt
+
+- debugger
+
+## 如何做到程序的高效性
 
 - 运行时（Run-time）
 
-1. 垃圾收集
+1. 内存分配和回收
 
-2. Strings, maps, communication channels. ？
+2. 堆栈的处理
 
-3. 并发（Concurrency）
+3. goroutine
+
+4. channels,Strings, maps, communication channels,reflection
+
+5. 并发（Concurrency）
+
+- 垃圾回收
 
 - Package model
 
@@ -92,20 +124,60 @@ If A.go depends on B.go depends on C.go:
 
 2. 并发
 
-- 语言负责 goroutine 管理，
-  内存管理
+- 语言级别和运行时支持写成实现并发，垃圾回收
 
-- 不断增长的堆栈，自动完成将 goroutine 复用到
-  线程
+- 语言负责 goroutine 管理，内存管理
 
--
+- 自动完成将 goroutine 复用到线程,自动增长 goroutine 的堆栈
 
-## 编译优化
+- 语言不合理的实现垃圾回收很难实现并发
 
-### C 语言编译过程
+3. 编译优化
+
+## C 语言编译过程
 
 ```
 1.
 源代码------预处理---->预处理文件---compile------>汇编代码--------汇编----->机器码-----link------>可执行文件
 
 ```
+
+## 如何做到简洁高效的编程
+
+### 简洁的语法设计
+
+1. 关键字少
+
+2. 类型声明简洁清晰
+
+3. 方法声明与类型声明分离
+
+4. 包的组织管理
+
+5. 接口的设计
+
+6. goroutine 的使用
+
+7. 初始化（initialization）
+
+8. reflection(反射)
+
+9. 动态类型（dynamic types）
+
+10. embedding
+
+11. iterators
+
+12. testing
+
+## Why go
+
+- 编译速度
+
+- 高效快速的开发
+
+- 高并发
+
+- 分布式系统
+
+- 多核网络硬件
