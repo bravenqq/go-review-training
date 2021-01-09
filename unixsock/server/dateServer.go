@@ -2,10 +2,10 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"net"
 	"os"
+	"time"
 )
 
 func main() {
@@ -14,18 +14,17 @@ func main() {
 		log.Fatalln("listen err:", err)
 
 	}
+	time.Sleep(time.Minute)
 	for {
 		con, err := l.Accept()
 		if err != nil {
 			log.Fatalln("connect err:", con)
 		}
-		// defer con.Close()
+		defer con.Close()
 		// _, err = con.Write([]byte("hi,nqq\n"))
 
 		read := bufio.NewReader(os.Stdin)
-		test := "test"
 		go func() {
-			fmt.Println(test)
 			for {
 				line, _, err := read.ReadLine()
 				if err != nil {
