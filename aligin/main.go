@@ -6,6 +6,10 @@ import (
 )
 
 func main() {
+	const (
+		a = "test"
+	)
+	fmt.Println(a)
 	//最大成员类型FloatValue占4字节，按4字节对齐
 	//FloatValue起始地址要按4字节对齐所以example占用12字节内存
 	example := Example{false, 20.33, 20}
