@@ -5,7 +5,6 @@ import (
 	"log"
 	"net"
 	"os"
-	"time"
 )
 
 func main() {
@@ -14,7 +13,6 @@ func main() {
 		log.Fatalln("listen err:", err)
 
 	}
-	time.Sleep(time.Minute)
 	for {
 		con, err := l.Accept()
 		if err != nil {
