@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	ph := flag.String("path", "./", "please input path")
+	ph := flag.String("path", "/Users/abbynie/Desktop", "please input path")
 	flag.Parse()
 	router := http.NewServeMux()
 	router.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
