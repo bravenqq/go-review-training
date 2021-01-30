@@ -362,7 +362,7 @@ FastJoin 使用[]byte 类型保存连接的字符，只有在函数结束之后�
 
 - 性能分析结果
 
-.image join.png \_ 1000
+.image join.png _ 1000
 
 - 常量
 
@@ -629,7 +629,7 @@ uintptr 是用来存放指针值值得类型，大小与平台有关
 
   字符串的内存结构
 
-.image strmemory.png \_ 300
+.image strmemory.png _ 300
 
 有一个保存了底层数据首字符位置的指针和保存字符占用的字节长度结构组成
 
@@ -657,7 +657,7 @@ uintptr 是用来存放指针值值得类型，大小与平台有关
 
 - 代码过程分析分析 i
 
-.image string.png \_ 400
+.image string.png _ 400
 
 - 字符串字面量
 
@@ -1065,7 +1065,7 @@ map 如何自定义比较方法和使用不可比较的类型做 key
 
 - 组合中类与被组合类的关系是 has a 的关系，如下图
 
-.image composition.JPG \_ 200
+.image composition.JPG _ 200
 
 - Json
 
@@ -1342,7 +1342,7 @@ interface{}
 
 接口从声明到赋值的变化过程
 
-.image ./interface.png \_ 400
+.image ./interface.png _ 400
 
 类型断言
 
