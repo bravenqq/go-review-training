@@ -1,0 +1,295 @@
+Understanding Memory Allocations in Go
+Tags: go, memory model, stack, heap, gc
+17:02 25 Jan 2021
+
+Rivendor
+
+- prefix knowledge
+
+Three important concepts in OS:
+
+    1. virtualization 虚拟化
+    2. concurrency 并发
+    3. persistence 持久性 (File, IO)
+
+为什么操作系统要将资源虚拟化 (理解即可)
+
+    它让系统更易于使用.
+    虚拟化能让许多程序运行(共享CPU),
+    让许多程序能同时访问自己的指令和数据(共享内存),
+    让许多程序访问设备(共享IO)
+
+关键问题: 如何将资源虚拟化 ( 重要 )
+
+- 虚拟化 CPU
+- 虚拟化内存
+
+* 抽象: 进程 (process)
+
+  操作系统为正在运行的程序提供的抽象, 就是所谓的进程(process).
+  也就是说一个进程就是一个正在运行的程序.
+
+关键问题: 如何提供拥有许多 CPU 的假相?
+
+    分时共享 (time sharing) CPU技术
+
+    为了实现多个程序在同一个CPU上运行,还需要一些机制(mechanism), 机制就是一些低级方法或协议.
+    例如不同程序在切换CPU使用的时候需要实现上下文切换 (context switch). 以便把CPU让出.
+
+- 程序计数器 (Program Counter, PC)(有时称为指令指针, Instruction Pointer, 或 IP)
+
+  告诉我们程序当前正在执行那个指令;
+
+- 栈指针 (Stack Pointer) 和 帧指针 (frame Pointer)
+
+  用来管理函数参数栈、局部变量和返回地址
+
+* 关键问题：如何合理的设计进程个数来最大的提高程序的效率，如何设计进程个数来提高资源的利用率
+
+* 为什么要设计进程
+
+* 进程的上下文
+
+* 进程的内存如何管理
+
+* 进程fork
+
+- 为什么要fork进程
+
+- fork的实现原理
+
+- 实践观察，观察进程如何fork
+   
+ 1. 观察栈中的数据是如何fork
+
+ 2. 观察堆中的数据是如何fork
+
+
+* 抽象: 进程 (process) - 进程的构成是什么
+
+- 机器状态
+
+  程序运行时可以读取或更新的内容.
+
+  1. 内存 (address space)
+
+     - 指令在内存中
+     - 读取和写入的数据也在内存中
+
+  2. 寄存器
+
+     - 很多指令明确的读取和更新寄存器
+
+  3. IO
+     - File、Network,Disk ...
+
+分离策略和机制:
+
+    1. 你的程序负责解决你的问题;
+    2. 操作系统的程序负责将你和其他人的多个不同程序做(context switch),以便让出CPU给不同的进程.
+
+- 进程 API
+
+* create
+* destroy
+* wait
+* miscellaneous controlscope
+* status
+
+- 进程的创建: 更多细节: 一个迷: 程序如何转化为进程?
+
+  具体来说, OS 如何启动并运行一个程序?进程创建实际如何进行?
+
+.image ./os_loader_program_to_process.svg
+
+- 进程的创建: 更多细节: 一个迷: 程序如何转化为进程? (continue)
+
+将代码和静态数据加载到内存后,OS 在运行此进程之前还需要执行一些其他的操作.
+
+    - 必须为程序的运行时栈(run-time stack or stack)分配一些内存.
+    - 程序使用stack存放局部变量,函数参数和返回地址. OS分配这些内存,并提供给process.
+    - OS也可能会用参数初始化stack.具体来说他将参数填入main()函数, 即 argc, argv数组.
+
+    - OS也可能为program的Heap分配一些内存. 在C中,通过调用malloc()来分配,free()来释放.
+
+    - 数据结构(链表,散列表,树和其他有趣的数据结构)需要Heap.
+
+    - OS还将执行一些其他初始化任务,例如I/O相关的任务.例如打开一个配置文件,建立一个日志文件.
+
+    - 接下来OS执行最后一项任务.启动程序,在入口处运行(main()). 通过跳转到main()例程.
+      OS将CPU的控制权转移到新创建的进程中,从而程序开始执行.
+
+- 进程状态
+
+  - running
+  - ready
+  - blocked
+
+.image ./process_status.svg
+
+    - 1个running状态的process发起一个I/O, 进入blocked状态,让出CPU
+    - 当这个blocked状态的process "I/O: 完成",状态变更为ready等待下一次时间片.
+    - 期间OS挑选出一个ready状态的process,scheduled后转为running;
+    - 这个running一直计算到用完分配的时间片,然后OS descheduled这个process为ready状态,等待下一次时间片.
+    - OS反复从ready状态中挑一个scheduled为running;
+
+Terms:
+
+    - scheduled: 调度
+    - descheduled:  取消调度
+
+- Introduction
+
+研究 runtime 的意义是什么?
+
+有时候对初学者来说,这个答案可能很久才能得出.
+我们先去理解一些简单的我们感兴趣的事情先.接下来聊聊 go 程序中的 stack & heap.
+
+在很多流行的编程环境中,堆栈(stack)通常指(call stack of the thread)线程的调用堆栈.(注意前面堆栈不是 stack & heap, just stack).
+
+call stack 是 LIFO 数据结构,用于存储参数,局部变量,以及在 thread 中执行函数时跟踪其他数据.每个函数调用将新 frame 添加(压入)到堆栈中.
+
+注意一些常见的说法:(别问我,我不是语言考古学者.), 在中文方面 stack(堆栈)和 stack and heap 经常搞混.
+
+    压入stack   入stack     推入stack   push stack
+    弹出stack   出stack     推出stack   pop  stack
+
+- call stack view
+
+.image ./call_stack_view.svg
+
+    因为stack的使用方式,我们没法保证当stack frame 被 popped 之后,我们还能安全的在其他地方引用.
+
+    实际上进程中stack的设计就是为了简化对内存的使用方式,能让我们简单安全的清除临时内存而设计的.
+
+    你只需要关注函数体内的生命周期(stack frame),而无需操心 stack memory free().
+
+    这里也关联下另一个需要思考的问题,如何正确的写函数?
+
+- OS 的 stack
+
+由于 thread 是由操作系统管理的,因此线程堆栈可用的内存量通常是固定的,例如在许多 Linux 环境中默认为 8M,这意味着我们还需要注意堆栈上的数据使用量,尤其是在递归当中,容易撑爆 stack 的大小.
+
+    sysctl -a|grep -i stack
+    ulimit -s
+
+- Go 的 stack and heap
+
+  Go 的 thread 管理使用了 goroutines, goroutines 在概念上类似 thread,但是存在于 user space 中.
+  这意味着决定 go 中 stack 规则和行为是由 Go 的 runtime 决定的,而非 OS.
+
+Threads abstracted out of existence:
+
+    +-----------------------------------+
+    |       Process Address Space       |
+    |-----------------------------------|
+    | +----------+----------+---------+ |
+    | | G1 stack | G2 stack | G3 stack| |
+    | +----------+----------+---------+ |
+    | +-------------------------------+ |
+    | |             Heap              | |
+    | +-------------------------------+ |
+    +-----------------------------------+
+
+- Call Stack on goroutine
+
+- todo golang中stack的观察测试
+  
+
+Close-up of a goroutine call stack
+
+.image ./goroutine*call_stack.png 400 *
+
+- Go's Memory Model (Russ Cox)
+
+.link http://nil.csail.mit.edu/6.824/2016/notes/gomem.pdf Go's Memory Model (MIT 6.824 /February 25, 2016)
+
+.link ./gomem.pdf Go's Memory Model (MIT 6.824 /February 25, 2016) local file
+
+.link https://golang.org/ref/mem The Go Memory Model (version of May 31, 2014)
+
+- Go 内存分配器可视化指南
+
+(暂时不要求, 先去看下 TCMalloc,需要点数据结构相关知识)
+
+.link https://medium.com/@ankur_anand/a-visual-guide-to-golang-memory-allocator-from-ground-up-e132258453ed 原文
+.link https://www.linuxzen.com/go-memory-allocator-visual-guide.html 译文：Go 内存分配器可视化指南
+
+- The stack and heap we know and love
+- The Go stack and heap
+- How do we know when a variable is allocated to the heap?
+
+.link https://golang.org/doc/faq#stack_or_heap office FAQ#stack or heap
+
+- Go 1.16 新特性 (2021 年 2 月发布)
+
+* new io/fs packages
+* Module-aware mode is enabled by default
+* Embedding Files, new // go:embed directive
+
+  go doc embed
+
+* GOVCS environment variable
+* The -toolexec build flag
+* The -i build flag
+* The list command
+* The -overlay flag
+* The new runtime/metrics package (runtime.ReadMemStats and debug.GCStats)
+
+.link https://github.com/golang/go/blob/master/doc/go1.16.html go1.16 Release Notes.
+
+- Go 1.16 新特性 (2021 年 2 月发布) (continue)
+
+* Vet
+
+  无效测试的新警告。在 goroutines 中使用.
+
+  func TestFoo(t \*testing.T) {
+  go func() {
+  if condition() {
+  t.Fatal("oops") // This exits the inner func instead of TestFoo.
+  }
+  ...
+  }()
+  }
+
+  重写为:
+
+  func TestFoo(t \*testing.T) {
+  go func() {
+  if condition() {
+  t.Error("oops")
+  return
+  }
+  ...
+  }()
+  }
+
+* todo 进程间的通信
+
+  1.实现方式
+
+  2. 实现原理
+
+  3. 竞态问题如何解决
+
+* 锁的实现原理
+
+  1. 为什么要设计锁
+
+  2. 锁的是按原理
+
+  3. 锁的优缺点
+
+- 分析redis的是按原理
+
+
+* 协程间的通信(channel)
+
+  1.为什么需要协程
+
+  2. 如何使用协层
+
+  3. 协程的实现原理
+
+- 协程的应用场景
