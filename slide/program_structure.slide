@@ -1408,3 +1408,85 @@ select 多路复用
 使用 channel 控制 goroutine 的关闭
 
     当channel关闭的时候goroutine可以从channel中立即读取零值，利用这个原理通知goroutine返回结束执行
+
+* interface 
+
+ - nil 
+ - a set of method
+ - interface {}
+ - interface {} say nothing 2015 talk , rob , gopher -> interface{}  , python
+ - interface {
+        Error() string
+   }
+
+- interface {} 混乱的了来源
+
+
+* error "error just a value" go proverbs error 可编程性
+
+ op behavis  出现错误
+
+ object -> funtion method ( op ,or behavis) 才会出现错误, 处理错误,
+
+ Error()
+
+ errors usecase\
+
+try .. catch
+
+object -> emthod (do something)
+
+netcould not connect  , error value { op, time, url , pid , error}
+nettimeout 
+
+    if err != nil {
+        fmt.Println(err)
+    }
+
+    if err != nil {
+        fmt.Println(err)
+    }
+
+    if err != nil {
+        fmt.Println(err)
+    }
+    if err != nil {
+        fmt.Println(err)
+    }
+    
+    type error interface {
+        Error() string
+    } 
+    printl log string 
+
+    // method
+    func (e *errorType) Error() string {
+       return e.s 
+    }
+
+    
+    //  file1  >> buf >> file2
+    // in op1 io1 &e.s -> &add{"FILE NOT FOUND"}
+    if op1 == op2 {
+        
+    }
+    if err ( op1 or op2)
+
+    type errorType struct {
+        s string
+    }
+
+
+    package builtin // import "builtin"
+
+    type error interface {
+        Error() string
+    }
+        The error built-in interface type is the conventional interface for
+        representing an error condition, with the nil value representing no error.
+
+
+
+    type error string
+
+
