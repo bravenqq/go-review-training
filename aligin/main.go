@@ -1,15 +1,30 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"log"
+	"os"
+	"runtime"
+	"runtime/pprof"
 	"unsafe"
 )
 
+var memprofile = flag.String("memprofile", "mem.prof", "write memory profile to `file`")
+
 func main() {
-	const (
-		a = "test"
-	)
-	fmt.Println(a)
+	flag.Parse()
+	if *memprofile != "" {
+		f, err := os.Create(*memprofile)
+		if err != nil {
+			log.Fatal("could not create memory profile: ", err)
+		}
+		defer f.Close() // error handling omitted for example
+		runtime.GC()    // get up-to-date statistics
+		if err := pprof.WriteHeapProfile(f); err != nil {
+			log.Fatal("could not write memory profile: ", err)
+		}
+	}
 	//最大成员类型FloatValue占4字节，按4字节对齐
 	//FloatValue起始地址要按4字节对齐所以example占用12字节内存
 	example := Example{false, 20.33, 20}

@@ -22,10 +22,13 @@ go中性能诊断工具分类和作用简介：
 
 * Profiling
 
-    分析对于识别昂贵或经常调用的代码段很有用。 Go运行时以pprof可视化工具所需的格式提供概要分析数据。可以在测试过程中通过go test或net / http / pprof程序包中提供的端点收集性能分析数据。用户需要收集性能分析数据，并使用pprof工具来过滤和可视化顶部代码路径。
+分析对于识别昂贵或经常调用的代码段很有用。 Go运行时以pprof可视化工具所需的格式提供概要分析数据。可以在测试过程中通过go test或net / http / pprof程序包中提供的端点收集性能分析数据。用户需要收集性能分析数据，并使用pprof工具来过滤和可视化顶部代码路径。
 
-   runtime/pprof 采集程序（非 Server）的运行数据进行分析
-   net/http/pprof：采集 HTTP Server 的运行时数据进行分析
+runtime/pprof 采集程序（非 Server）的运行数据进行分析
+
+net/http/pprof：采集 HTTP Server 的运行时数据进行分析
+
+* 
 
 - CPU: CPU Profile分析了真正消耗的CPU时间，不包括睡眠和等待时间
 
@@ -39,9 +42,14 @@ go中性能诊断工具分类和作用简介：
 
 - mutex: Mutex profile 报告锁导致的竞争问题，当你的CPU由于锁导致不能完全利用使用这个分析。默认是未开启，使用runtime.SetMutexProfileFraction开启它
 
+* 在go中如何使用性能分析
+
+- 测试中开启性能分析：:wq
+  go test -cpuprofile cpu.prof -memprofile mem.prof -bench .
+
 * 其他性能分析工具
 
- linux操作系统可以使用perf tools分析go程序，Perf可以分析cgo/SWIG代码和内核，对于深入了解本机/内核性能瓶颈很有用。在macOS 操作系统中， Instruments很适合用来分析go程序性能
+linux操作系统可以使用perf tools分析go程序，Perf可以分析cgo/SWIG代码和内核，对于深入了解本机/内核性能瓶颈很有用。在macOS 操作系统中， Instruments很适合用来分析go程序性能
 
 * 能分析生产环境服务性能吗？
 
@@ -80,4 +88,9 @@ go使用go tool pprof提供了text,graph,callgrind性能分析阅读 [[https://b
 * Execution tracer
 * GODEBUG
 
+* metric
+[[https://prometheus.io/docs/concepts/metric_types/][metric]]
+
+* Ganglia
+[[http://ganglia.sourceforge.net][Ganglia]]
 
