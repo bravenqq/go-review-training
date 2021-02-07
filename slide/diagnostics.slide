@@ -1,0 +1,83 @@
+analysis profile in golang
+
+Tags: go, memory,cpu profile,
+
+5 Feb 2021
+
+Abbynie
+
+* Introduction
+
+go中性能诊断工具分类和作用简介：
+
+- profile: 分析内存使用情况，函数调用情况，识别出程序中的性能瓶颈
+
+- Tracing: 分析程序声明周期中造成系统延迟的用户请求和调用,分析造成每个组件对系统造成的延迟情况
+
+- Debugging: 可以追踪程序的执行过程，通过调试来验证程序的状态和流
+
+- Runtime statistics and events:分析了Go程序运行状况，有助于识别吞吐量、利用率和性能变化
+
+注意：某些诊断工具可能会相互干扰。例如，精确的内存分析会歪曲CPU配置文件，goroutine阻止分析会影响调度程序跟踪。孤立地使用工具以获得更精确的信息。
+
+* Profiling
+
+    分析对于识别昂贵或经常调用的代码段很有用。 Go运行时以pprof可视化工具所需的格式提供概要分析数据。可以在测试过程中通过go test或net / http / pprof程序包中提供的端点收集性能分析数据。用户需要收集性能分析数据，并使用pprof工具来过滤和可视化顶部代码路径。
+
+   runtime/pprof 采集程序（非 Server）的运行数据进行分析
+   net/http/pprof：采集 HTTP Server 的运行时数据进行分析
+
+- CPU: CPU Profile分析了真正消耗的CPU时间，不包括睡眠和等待时间
+
+- heap: heap profile 分析了内存使用情况，检查内存泄漏，监视当前和历史内存使用情况
+
+- threadcreate：分析程序创建OS线程部分的情况
+
+- goroutine: Goroutine profile 分析了当前协程的堆栈跟踪
+
+- block: block profile 分析了由阻塞同步原语导致的goroutine阻塞。默认情况未开启，使用
+
+- mutex: Mutex profile 报告锁导致的竞争问题，当你的CPU由于锁导致不能完全利用使用这个分析。默认是未开启，使用runtime.SetMutexProfileFraction开启它
+
+* 其他性能分析工具
+
+ linux操作系统可以使用perf tools分析go程序，Perf可以分析cgo/SWIG代码和内核，对于深入了解本机/内核性能瓶颈很有用。在macOS 操作系统中， Instruments很适合用来分析go程序性能
+
+* 能分析生产环境服务性能吗？
+
+生产环境进行性能分析也是安全的，但是有代价（例如CPU性能分析).你应该在程序发布到生产环境之前进行性能分析
+  
+你可能需要定期对生产环境进程性能分析，尤其是在many replicas of a single process系统中，定期选择一个副本，每隔Y秒分析其X秒的性能，然后保存结果进行可视化分析。定期重复这个过程。可以手动或设计制动分析来发现生产环境的问题。多个程序之间的性能收集分析会互相影响，所以推荐一次分析一个
+
+* 如何可视化性能分析数据
+  
+go使用go tool pprof提供了text,graph,callgrind性能分析阅读 [[https://blog.golang.org/pprof][Profiling Go programs]].
+
+.image https://storage.googleapis.com/golangorg-assets/pprof-text.png 
+
+用文本形式列出代价最高的调用栈 
+
+* 
+.image https://storage.googleapis.com/golangorg-assets/pprof-dot.png _ 800
+
+使用图表形式展示系统调用站性能分析
+
+
+* 在下面的例子中，runtime.concatstrings话费了530ms时间运行，列出了没行的运行时间
+ 
+.image https://storage.googleapis.com/golangorg-assets/pprof-weblist.png _ 800
+用网络列表形式可视化性能分析
+
+火焰图(flame graph)是另一种可视化性能分析工具
+
+* 自定义性能分析
+
+除了上面提供的运行时性能分析工具，go使用者可以通过[[https://golang.org/pkg/runtime/pprof/#Profile][pprof.Profile]]
+
+
+* Debugging
+* Runtime statistics and events
+* Execution tracer
+* GODEBUG
+
+
