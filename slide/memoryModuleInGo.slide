@@ -1,10 +1,12 @@
 Understanding Memory Allocations in Go
+
 Tags: go, memory model, stack, heap, gc
+j
 17:02 25 Jan 2021
 
 Rivendor
 
-- prefix knowledge
+* prefix knowledge
 
 Three important concepts in OS:
 
@@ -29,9 +31,9 @@ Three important concepts in OS:
     尽可能调度更多程序执行，不空闲CPU
     
 
-关键问题: 如何将资源虚拟化 ( 重要 )
+* 关键问题: 如何将资源虚拟化 ( 重要 )
    
-   时间虚拟化：将CPU按时间片调度不同进程使用执行
+   时间虚拟化(分时共享)：将CPU按时间片调度不同进程使用执行
 
    空间虚拟化：硬盘分区安装不同文件系统，操作管理不同的磁盘
 
@@ -49,9 +51,7 @@ Three important concepts in OS:
 关键问题: 如何提供拥有许多 CPU 的假相?
 
     分时共享 (time sharing) CPU技术
-
     为了实现多个程序在同一个CPU上运行,还需要一些机制(mechanism), 机制就是一些低级方法或协议.
-
     例如不同程序在切换CPU使用的时候需要实现上下文切换 (context switch). 以便把CPU让出.
 
 - 寄存器的状态
@@ -66,11 +66,7 @@ Three important concepts in OS:
 
   用来管理函数参数栈、局部变量和返回地址
 
-  CPU把需要保存的上下文数据保存到内存中，内存中还保存了内存堆栈中的数据，文本代码，全局变量、常量数据
-
-  CPU恢复被调度进程中的上下文
-
-- 关键问题：进程个数要如何设计来利用各种资源
+* 关键问题：进程个数要如何设计来利用各种资源
 
   计算型程序如何利用CPU资源
 
@@ -96,9 +92,10 @@ Three important concepts in OS:
    > CPU校验传输的数据是否正确、是否漏传、对加密的数据进行decoding等，大部分工作都是CPU完成
    > 执行多个下载任务时，CPU分时调度执行多个进程下载任务，CPU浪费时间在上线切换、I/O处理上
 
+* 一个利用现代网卡下载资源例子
+
    2. 模型2 现在网卡下载处理过程
 
-   1. 模型2
      host1                                                   host2
         --------------------------                   ---------------------------- 
         |   process               |                  ｜                         |
@@ -143,13 +140,13 @@ Three important concepts in OS:
     1. 你的程序负责解决你的问题;
     2. 操作系统的程序负责将你和其他人的多个不同程序做(context switch),以便让出CPU给不同的进程.
 
-- 进程 API
+* 进程 API
 
-* create
-* destroy
-* wait
-* miscellaneous controlscope
-* status
+- create
+- destroy
+- wait
+- miscellaneous controlscope
+- status
 
 - 进程的创建: 更多细节: 一个迷: 程序如何转化为进程?
 
@@ -269,7 +266,7 @@ Threads abstracted out of existence:
 
 Close-up of a goroutine call stack
 
-.image ./goroutine*call_stack.png 400 *
+.image ./goroutine*call_stack.png 400 _
 
 - Go's Memory Model (Russ Cox)
 
