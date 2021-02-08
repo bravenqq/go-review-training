@@ -1,13 +1,11 @@
 // Package main provides ...
 package main
 
-import (
-	"fmt"
-	"net/http"
-)
+import "time"
 
 func main() {
-	a := "test"
-	fmt.Println(a)
-	http.ListenAndServe(":6060", nil)
+	// a := "test"
+	// fmt.Println(a)
+	// http.ListenAndServe(":6060", nil)
+	time.Sleep(1 * time.Minute)
 }
