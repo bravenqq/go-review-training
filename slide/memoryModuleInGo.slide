@@ -1,10 +1,10 @@
 Understanding Memory Allocations in Go
 
 Tags: go, memory model, stack, heap, gc
-j
 17:02 25 Jan 2021
 
-Rivendor
+nqq
+bantana
 
 * prefix knowledge
 
@@ -353,24 +353,24 @@ Close-up of a goroutine call stack
   无效测试的新警告。在 goroutines 中使用.
 
   func TestFoo(t \*testing.T) {
-  go func() {
-  if condition() {
-  t.Fatal("oops") // This exits the inner func instead of TestFoo.
-  }
-  ...
-  }()
+      go func() {
+        if condition() {
+            t.Fatal("oops") // This exits the inner func instead of TestFoo.
+        }
+      ...
+    }()
   }
 
   重写为:
 
   func TestFoo(t \*testing.T) {
-  go func() {
-  if condition() {
-  t.Error("oops")
-  return
-  }
-  ...
-  }()
+      go func() {
+          if condition() {
+              t.Error("oops")
+              return
+          }
+          ...
+      }()
   }
 
 * todo 进程间的通信
