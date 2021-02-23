@@ -6,7 +6,7 @@ import "fmt"
 const (
 	a int = 10*iota + 1
 	b
-	c = 10*iota + 1
+	c = 10*iota + 10
 	d
 	e
 )
