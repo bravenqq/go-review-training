@@ -8,22 +8,22 @@ func main() {
 	test(arr)
 	fmt.Println(arr)
 
-	var p *int
-	p = &arr[1]
-	fmt.Println(*p)
-	*p = 60
-	fmt.Println(arr)
+	// var p *int
+	// p = &arr[1]
+	// fmt.Println(*p)
+	// *p = 60
+	// fmt.Println(arr)
 
-	var b [10]*int
-	a := 10
-	b[0] = &a
+	// var b [10]*int
+	// a := 10
+	// b[0] = &a
+	//
+	// s := "hello,world"
+	// q := &s
+	// *q = "nqq"
+	// fmt.Println(s)
 
-	s := "hello,world"
-	q := &s
-	*q = "nqq"
-	fmt.Println(s)
-
-	t := test
+	// t := test
 	//arr1初始化为对应成员的零值
 	var arr1 [10]int
 	fmt.Println("arr1:", arr1)
