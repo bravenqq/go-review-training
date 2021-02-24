@@ -3,10 +3,11 @@ package main
 
 func main() {
 	var a = 1
-	go f(&a)
+	f(a)
 }
 
-func f(t *int) {
+func f(t int) *int {
 	//使用的是main中a的地址来修改a变量
-	*t++
+	t++
+	return &t
 }
