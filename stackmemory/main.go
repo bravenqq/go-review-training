@@ -20,5 +20,12 @@ func Join(slice []string, str string) string {
 	}
 	return s
 }
+
 func f(s string) {
+	var a = 1
+	func(t int) *int {
+		//使用的是main中a的地址来修改a变量
+		t++
+		return &t
+	}(a)
 }
