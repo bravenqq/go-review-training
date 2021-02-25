@@ -258,7 +258,7 @@ call stack 是 LIFO 数据结构,用于存储参数,局部变量,以及在 threa
 
    3. Google Chrome使用frok创建独立进程处理每个页面请求
 
-   4. mysql服务多进程实现处理数据库请求任务
+   4. mysql服务多进程实现处理数据库请求
 
 [[https://courses.cs.vt.edu/~cs3204/spring2009/butta/local/lectures/lecture-07.pdf][更多例子和学习]]
 
@@ -295,6 +295,10 @@ Fork操作会为子进程创建一个单独的地址空间。子进程拥有父�
 > 父进程退出且操作系统不允许无父进程的子进程执行
 
 - fork的开销
+
+  1. 复制所有的父内存数据
+
+  2. 进程间通信开销大
 
 * OS 的 stack
 

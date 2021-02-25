@@ -3,9 +3,6 @@ package main
 
 func main() {
 	strs := []string{"hell", "wor", "test", "nqq"}
-	// for _, s := range strs {
-	// 	f(s)
-	// }
 	Join(strs, ",")
 }
 
