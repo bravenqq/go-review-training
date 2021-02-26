@@ -1,20 +1,16 @@
 // Package main provides ...
 package main
 
-import "fmt"
-
 func main() {
-	var slice []int
-	//slice 与nil做比较，底层数组没分配内存
-	if slice == nil {
-		fmt.Println("slice is nil")
-	}
-	slice = make([]int, 0, 10)
-	if slice == nil {
-		fmt.Println("slice still nil")
-	}
+	a := 5
+	b := 6
+	slice := make([]int, a, b)
+	//slice does not escape
+	add(slice, 10)
 }
 
-func f() []int {
-	return make([]int, 0, 10)
+func add(slice []int, v int) {
+	for i := 0; i < len(slice); i++ {
+		slice[i] = v
+	}
 }
