@@ -4,9 +4,7 @@ package main
 func main() {
 	var slice []int
 	//slice 与nil做比较，底层数组没分配内存
-	a := 1048576
-	slice = make([]int, a, a)
-	_ = slice
+	slice = make([]int, 5, 10)
 }
 
 func f() []int {
