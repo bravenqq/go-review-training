@@ -2,15 +2,19 @@
 package main
 
 func main() {
-	a := 5
-	b := 6
+	a := 10
+	b := 20
+	//make([]int, a, b) escapes to heap
 	slice := make([]int, a, b)
-	//slice does not escape
-	add(slice, 10)
+	_ = slice
 }
 
-func add(slice []int, v int) {
-	for i := 0; i < len(slice); i++ {
-		slice[i] = v
+func add(slice []int, v int) []int {
+	l := cap(slice)
+	for i := 0; i < l+5; i++ {
+		slice = append(slice, v)
 	}
+
+	// fmt.Printf("slice:%p \n", &slice)
+	return slice
 }
