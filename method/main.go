@@ -1,13 +1,18 @@
 package main
 
 import (
-	"fmt"
+	"image/color"
 	"math"
 )
 
 type Point struct {
 	X float64
 	Y float64
+}
+
+type ColoredPoint struct {
+	Point
+	Color color.Color
 }
 
 func (p Point) Add(q Point) Point {
@@ -19,6 +24,17 @@ func (p Point) Sub(q Point) Point {
 }
 
 type Path []Point
+
+// same thing, but as a method of the Point type
+func (path Path) Distance() float64 {
+	sum := 0.0
+	for i := range path {
+		if i > 0 {
+			sum += path[i-1].Distance(path[i])
+		}
+	}
+	return sum
+}
 
 func (path Path) TranslateBy(offset Point, add bool) {
 	//Point类型方法的方法值
@@ -40,7 +56,7 @@ func Distance(p, q Point) float64 {
 }
 
 // same thing, but as a method of the Point type
-func (p Point) Distance(q Point) float64 {
+func (p *Point) Distance(q Point) float64 {
 	return math.Hypot(q.X-p.X, q.Y-p.Y)
 }
 
@@ -60,13 +76,9 @@ func (v Values) Add(key, value string) {
 }
 
 func main() {
-
-	var m Values = make(Values)
-	if m == nil {
-		fmt.Println("m is nil")
-	}
-
-	fmt.Println("befor:", m.Get("item"))
-	m.Add("item", "3")
-	fmt.Println("after:", m.Get("item"))
+	// red := color.RGBA{255, 0, 0, 255}
+	// blue := color.RGBA{0, 0, 255, 255}
+	p := ColoredPoint{Point: Point{1, 1}}
+	q := ColoredPoint{Point: Point{5, 4}}
+	p.Distance(q.Point)
 }
