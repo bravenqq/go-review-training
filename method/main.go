@@ -1,8 +1,13 @@
 package main
 
+import (
+	"fmt"
+	"math"
+)
+
 type Point struct {
-	X float32
-	Y float32
+	X float64
+	Y float64
 }
 
 func (p Point) Add(q Point) Point {
@@ -29,6 +34,39 @@ func (path Path) TranslateBy(offset Point, add bool) {
 	}
 }
 
+// traditional function
+func Distance(p, q Point) float64 {
+	return math.Hypot(q.X-p.X, q.Y-p.Y)
+}
+
+// same thing, but as a method of the Point type
+func (p Point) Distance(q Point) float64 {
+	return math.Hypot(q.X-p.X, q.Y-p.Y)
+}
+
+type Values map[string][]string
+
+// Get returns the first value associated with the given key,
+// or "" if there are none.
+func (v Values) Get(key string) string {
+	if vs := v[key]; len(vs) > 0 {
+		return vs[0]
+	}
+	return ""
+}
+
+func (v Values) Add(key, value string) {
+	v[key] = append(v[key], value)
+}
+
 func main() {
 
+	var m Values = make(Values)
+	if m == nil {
+		fmt.Println("m is nil")
+	}
+
+	fmt.Println("befor:", m.Get("item"))
+	m.Add("item", "3")
+	fmt.Println("after:", m.Get("item"))
 }
