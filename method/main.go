@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"image/color"
 	"math"
+	"time"
 )
 
 type Point struct {
@@ -75,10 +77,32 @@ func (v Values) Add(key, value string) {
 	v[key] = append(v[key], value)
 }
 
+type Rocket struct {
+}
+
+func (r *Rocket) Launch() {}
+
 func main() {
-	// red := color.RGBA{255, 0, 0, 255}
-	// blue := color.RGBA{0, 0, 255, 255}
-	p := ColoredPoint{Point: Point{1, 1}}
-	q := ColoredPoint{Point: Point{5, 4}}
-	p.Distance(q.Point)
+	var p Point
+	var q Point
+	var distance func(q Point) float64
+	distance = p.Distance
+	distance(p)
+
+	//func (p *Point) Distance(q Point) float64 => func(p *Point,q point)float64
+	var d func(p *Point, q Point) float64
+	if d == nil {
+		fmt.Println("d is nil")
+		fmt.Printf("%p\n", &d)
+	}
+	d = (*Point).Distance
+	if d == nil {
+		fmt.Println("d is still nil")
+	}
+	fmt.Printf("%p", &d)
+	d(&p, q)
+
+	r := new(Rocket)
+	time.AfterFunc(10*time.Second, func() { r.Launch() })
+	time.AfterFunc(10*time.Second, r.Launch)
 }
