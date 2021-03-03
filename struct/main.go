@@ -7,8 +7,14 @@ type Person struct {
 
 type Employee struct {
 	Person
-	ID     int
-	Salary int
+	ID          int
+	Salary      int
+	Subordinate []Person
+}
+
+type Point struct {
+	X float64
+	Y float64
 }
 
 func main() {
@@ -17,7 +23,13 @@ func main() {
 
 	e := new(Employee)
 	e.Name = "test"
+	f()
+}
 
+func f() Employee {
+	var e Employee
+	e.Subordinate = make([]Person, 10)
+	return e
 }
 
 type Node struct {

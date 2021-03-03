@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"image/color"
 	"math"
 	"time"
 )
@@ -12,9 +11,14 @@ type Point struct {
 	Y float64
 }
 
-type ColoredPoint struct {
-	Point
-	Color color.Color
+// traditional function
+func Distance(p, q Point) float64 {
+	return math.Hypot(q.X-p.X, q.Y-p.Y)
+}
+
+// same thing, but as a method of the Point type
+func (p Point) Distance(q Point) float64 {
+	return math.Hypot(q.X-p.X, q.Y-p.Y)
 }
 
 func (p Point) Add(q Point) Point {
