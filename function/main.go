@@ -1,7 +1,9 @@
 // Package main provides ...
 package main
 
-import "net/http"
+import (
+	"os"
+)
 
 func add(a, b int) int {
 	return a + b
@@ -11,22 +13,26 @@ func minus(a, b int) int {
 	return a - b
 }
 
-type Handle func(a, b int) int
-
-func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-	})
-	var f func(a, b int) int
-	var res bool
-	if res {
-		f = add
-	} else {
-		f = minus
-	}
-
-	_ = f
+func tempDirs() []string {
+	return []string{"./test"}
 }
 
-func Map(h Handle, a, b int) int {
-	return h(a, b)
+func main() {
+
+	var rmdirs []func()
+	for _, d := range tempDirs() {
+		dir := d               // NOTE: necessary!
+		os.MkdirAll(dir, 0755) // creates parent directories too
+		i := 10
+		rmdirs = append(rmdirs, func() {
+			a := i
+			_ = a
+			os.RemoveAll(dir)
+		})
+	}
+	// ...do some work…
+	for _, rmdir := range rmdirs {
+		rmdir() // clean up
+	}
+
 }
