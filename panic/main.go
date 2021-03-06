@@ -1,13 +1,22 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"runtime/debug"
 )
 
 func main() {
-	index := flag.Int("index", 3, "please input index value")
-	flag.Parse()
-	arr := []int{0, 1, 2}
-	fmt.Println(arr[*index])
+	defer func() {
+		fmt.Println("test")
+	}()
+	defer func() {
+		fmt.Println(string(debug.Stack()))
+	}()
+	f("")
+}
+
+func f(a string) {
+	if a == "" {
+		panic("a is nil")
+	}
 }
