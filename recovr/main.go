@@ -14,11 +14,5 @@ func main() {
 	defer func() {
 		fmt.Println("hello,world")
 	}()
-	ch := make(chan struct{})
-	go func() {
-		ch <- struct{}{}
-		fmt.Println("test")
-		panic("test panic")
-	}()
-	<-ch
+	panic("test panic")
 }
