@@ -9,13 +9,13 @@ func main() {
 	defer func() {
 		fmt.Println("test")
 	}()
-	defer func() {
-		fmt.Println(string(debug.Stack()))
-	}()
-	f("")
+	go f("")
 }
 
 func f(a string) {
+	defer func() {
+		fmt.Println(string(debug.Stack()))
+	}()
 	if a == "" {
 		panic("a is nil")
 	}
