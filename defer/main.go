@@ -1,45 +1,33 @@
 // Package main provides ...
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
 	a()
 	fmt.Println("test")
 }
+
 func a() {
-	// i := 0
-	// fmt.Printf("0.i:%p\n", &i)
-	// defer func() {
-	// 	fmt.Printf("1.i:%p\n", &i)
-	// 	fmt.Println(i)
-	// }()
-	// defer func() {
-	// 	if r := recover(); r != nil {
-	// 		fmt.Println("Recovered in f", r)
-	// 	}
-	// }()
-	// i++
-	// if i == 1 {
-	// 	panic(i)
-	// }
-	// defer func(i int) {
-	// 	fmt.Printf("2.i:%p\n", &i)
-	// 	fmt.Println(i)
-	// }(i)
-	c()
-	d()
-}
-
-func d() {
-	var i int
+	i := 0
+	fmt.Printf("0.i:%p\n", &i)
 	defer func() {
-		fmt.Println("d i:", i)
+		fmt.Printf("1.i:%p\n", &i)
+		fmt.Println(i)
 	}()
-	i = 1
-}
-
-func c() (i int) {
-	defer func() { i++; fmt.Println("i:", i) }()
-	return 1
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Recovered in f", r)
+		}
+	}()
+	i++
+	if i == 1 {
+		panic(i)
+	}
+	defer func(i int) {
+		fmt.Printf("2.i:%p\n", &i)
+		fmt.Println(i)
+	}(i)
 }
