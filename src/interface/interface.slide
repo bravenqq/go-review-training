@@ -1,0 +1,13 @@
+understating interface in go
+
+Tags:go,interface
+
+nqq
+
+* 接口合约
+* 接口类型
+* 实现接口条件
+* 接口值
+* 类型断言
+* 类型分支
+* error接口
