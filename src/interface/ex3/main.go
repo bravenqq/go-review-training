@@ -8,8 +8,19 @@ import (
 	"os"
 )
 
+type Counter int
+
+func (c *Counter) Write(p []byte) (int, error) {
+	*c = Counter(len(p))
+	return len(p), nil
+}
+
 func main() {
 	var w io.Writer
+	var c Counter
+	w = &c
+	w.Write([]byte("hello"))
+	fmt.Println("counter:", c)
 	if w == nil {
 		fmt.Println("w is nil")
 	}
