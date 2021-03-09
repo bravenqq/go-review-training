@@ -39,4 +39,9 @@ func main() {
 	w = rwc
 	fmt.Printf("w %T\n", w)
 
+	buffer := (*bytes.Buffer)(nil)
+	fmt.Printf("%p\n", &buffer)
+	var wr io.Writer = (*bytes.Buffer)(nil)
+	fmt.Println(wr == nil)
+
 }
