@@ -2,8 +2,10 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"os"
 )
 
@@ -12,7 +14,7 @@ type Person struct {
 	Age  int
 }
 
-func (p Person) String() string {
+func (p *Person) String() string {
 	return fmt.Sprintf("name:%s age:%d", p.Name, p.Age)
 }
 
@@ -33,4 +35,15 @@ func main() {
 	w = nil
 	fmt.Printf("interface 动态类型：%T,动态值：%v\n", w, w)
 	fmt.Println(w == os.Stdout) //false,w的动态值是nil
+
+	var p fmt.Stringer
+	p = &Person{Name: "nqq", Age: 30}
+	data, err := json.Marshal(p)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("data:", string(data))
+	var person Person
+	json.Unmarshal(data, &person)
+	fmt.Printf("%+v\n", person)
 }
