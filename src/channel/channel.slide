@@ -1,0 +1,13 @@
+understating interface in go
+
+Tags:go,interface
+
+nqq
+
+* 什么是channel
+* channel 的操作和使用方式
+* channel的内存结构
+* chanel的使用场景
+* 使用channel实现的几种并发模式
+* channel 的设计原理
+
