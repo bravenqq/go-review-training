@@ -1,0 +1,20 @@
+understating goroutine in go
+
+Tags:go,goroutine
+
+nqq
+
+* 什么是goroutine, goroutine的栈内存结构
+* 如何使用goroutine
+* 启动一个goroutine需要什么资源
+* goroutien的调度机制
+* goroutine间的通信
+* 使用gorotine实现的几种并发模式
+* 使用goroutine时的竞态问题如何处理
+* 对比process、thread、goroutine
+
+- 使用的内存比较
+
+- 通信机制
+
+- 适用场景
