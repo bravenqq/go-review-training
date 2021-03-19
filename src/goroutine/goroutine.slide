@@ -10,6 +10,10 @@ nqq
 * goroutien的调度机制
 * goroutine间的通信
 * 使用gorotine实现的几种并发模式
+- runner
+- pool
+- work
+
 * 使用goroutine时的竞态问题如何处理
 * 对比process、thread、goroutine
 
