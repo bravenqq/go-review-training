@@ -5,7 +5,29 @@ Tags:go,interface
 nqq
 
 * 什么是channel
+
+- 有缓冲channel和无缓冲channel，两者之间的区别和使用场景
+
 * channel 的操作和使用方式
+
+- 往channel中放入数据
+
+- 从channel中读取数据
+
+- close关闭channel
+
+关闭channel后不能发送值到channel,但是会一直接收channel中的值，没有就接受channel中存储数据类型的零值
+
+向关闭后的channel发送值会崩溃
+
+关闭已关闭的channel会崩溃
+
+- len获取channel中当前的值
+
+- for range
+
+当channel被关闭并且没有值可接收时for range 会跳出循环
+
 * channel的内存结构
 * chanel的使用场景
 * 使用channel实现的几种并发模式

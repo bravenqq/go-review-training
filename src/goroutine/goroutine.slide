@@ -5,9 +5,10 @@ Tags:go,goroutine
 nqq
 
 * 什么是goroutine, goroutine的栈内存结构
-* 如何使用goroutine
-* 启动一个goroutine需要什么资源
 * goroutien的调度机制
+- 内核线程
+- 逻辑处理器
+- 调度机制
 * goroutine间的通信
 * 使用gorotine实现的几种并发模式
 - runner
@@ -15,6 +16,18 @@ nqq
 - work
 
 * 使用goroutine时的竞态问题如何处理
+
+thread的调度过程
+
+时钟中断-》操作系统调度器选择调度执行的线程-》保存当前线程的上下文到内存，恢复被调度线程的上下文，更新调度器的数据结构（更新正在调度的线程和将换出的线程放到等待调度队列
+
+- thread调度的问题
+
+1. 由操作系统决定线程调度
+
+2. 每次切换线程，都要完全将上下文切换到内存中，操作很慢，因为其局部性很差需要几次内存访问，并且会增加运行的cpu周期？
+
+
 * 对比process、thread、goroutine
 
 - 使用的内存比较
