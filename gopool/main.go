@@ -37,11 +37,11 @@ func NewPool(capacity int) (*Pool, error) {
 }
 
 func (p *Pool) Put(w Adder) {
-	// if p.used < p.capacity {
-	// p.used++
-	// p.wg.Add(1)
-	// p.run()
-	// }
+	if p.used < p.capacity {
+		p.used++
+		p.wg.Add(1)
+		p.run()
+	}
 	p.works <- w
 }
 
@@ -56,14 +56,11 @@ func (p *Pool) Close() error {
 	return nil
 }
 
-func (p *Pool) Run() {
-	for i := 0; i < 20; i++ {
-		p.wg.Add(1)
-		go func() {
-			for w := range p.works {
-				w.Add()
-			}
-			p.wg.Done()
-		}()
-	}
+func (p *Pool) run() {
+	go func() {
+		for w := range p.works {
+			w.Add()
+		}
+		p.wg.Done()
+	}()
 }
