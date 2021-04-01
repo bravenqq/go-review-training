@@ -1,0 +1,84 @@
+filesystem
+
+Tags: filesystem, root filesystem, linux
+
+21:00 01 April 2021
+
+nqq
+
+* history
+
+在文件系统出现之前，程序需要自己操作磁盘存储数据，知道如何存放数据到磁盘中和如何从磁盘获取数据
+
+每个程序独立操作磁盘存储数据，程序很难知道哪些磁盘空间被其它程序使用
+
+所以我们设计文件系统，当程序要存储数据时，交给文件系统来储存，文件系统会将数据存储到磁盘中，并记录数据存放的位置和相关信息
+
+* introduction
+在计算中，文件系统控制数据的存储和检索方式。如果没有文件系统，放置在存储介质中的数据将是一个庞大的数据主体，无法分辨一个数据在哪里停止以及下一个数据在哪里开始。通过将数据分成多个部分并给每个部分取一个名称，可以轻松地隔离和识别数据。以纸质数据管理系统的命名方式命名，每组数据称为“文件”。用于管理数据组及其名称的结构和逻辑规则称为“文件系统”。
+
+* design（文件系统如何管理磁盘中的数据存储和读取）
+
+- File:data+metadata
+
+操作系统以文件为基本单位来组织管理数据
+
+metadata用来记录文件的基本信息包括：name、path、creator、created、modified、size、privilege、position（存储位置）、type
+
+- Directory
+
+如果只是使用文件来管理数据，就不能出现文件的重名，要通过文件名称检索文件信息可能在成千上万个文件metadata中查找文件的metada获取文件的数据
+
+设计目录来允许用户组织管理文件，将文件按不同分类分离到不同目录中，目录中的数据记录了目录下的文件信息(metata)
+
+- Directory tree
+
+目录是有层次结构的，这种层次结构我们称为目录树。
+
+就像一颗树，树干分支成树枝，分支成分支，树枝，最后成叶子。在文件系统中，所谓的根目录是主干，目录是分支，文件是叶子。
+
+
+* root filesystem
+
+文件系统可以管理一块磁盘，当我们要在主机中加入新的磁盘或别的iOS设备如网路、移动磁盘如何能使用新的IO设备且不影响现在的存储逻辑结构?
+
+在liunx系统中文件是从跟目录开始的，设定一个文件系统为根目录文件系统。当需要扩充I/O设备时（例如磁盘损坏添加新磁盘、添加移动硬盘、添加影响设备等，将添加设备管理的文件系统mount on 到根文件系统中的某个位置，这样就可以使用新的设备，且不会影响当前文件系统的结构
+
+例如如下master节点上挂载的文件系统:
+df -ahT
+Filesystem     Type         Size  Used Avail Use% Mounted on
+sysfs          sysfs           0     0     0    - /sys
+proc           proc            0     0     0    - /proc
+udev           devtmpfs     2.0G     0  2.0G   0% /dev
+devpts         devpts          0     0     0    - /dev/pts
+tmpfs          tmpfs        394M  908K  393M   1% /run
+/dev/vda1      ext4         9.6G  4.8G  4.8G  50% /
+securityfs     securityfs      0     0     0    - /sys/kernel/security
+tmpfs          tmpfs        2.0G     0  2.0G   0% /dev/shm
+tmpfs          tmpfs        5.0M     0  5.0M   0% /run/lock
+tmpfs          tmpfs        4.0M     0  4.0M   0% /sys/fs/cgroup
+cgroup2        cgroup2         0     0     0    - /sys/fs/cgroup/unified
+cgroup         cgroup          0     0     0    - /sys/fs/cgroup/systemd
+pstore         pstore          0     0     0    - /sys/fs/pstore
+none           bpf             0     0     0    - /sys/fs/bpf
+cgroup         cgroup          0     0     0    - /sys/fs/cgroup/hugetlb
+systemd-1      -               -     -     -    - /proc/sys/fs/binfmt_misc
+hugetlbfs      hugetlbfs       0     0     0    - /dev/hugepages
+mqueue         mqueue          0     0     0    - /dev/mqueue
+debugfs        debugfs         0     0     0    - /sys/kernel/debug
+tracefs        tracefs         0     0     0    - /sys/kernel/tracing
+configfs       configfs        0     0     0    - /sys/kernel/config
+fusectl        fusectl         0     0     0    - /sys/fs/fuse/connections
+/dev/loop0     squashfs      56M   56M     0 100% /snap/core18/1988
+/dev/loop1     squashfs      69M   69M     0 100% /snap/lxd/19823
+/dev/vda15     vfat         105M  7.8M   97M   8% /boot/efi
+/dev/loop2     squashfs      33M   33M     0 100% /snap/snapd/11402
+tmpfs          tmpfs        394M  908K  393M   1% /run/snapd/ns
+nsfs           nsfs            0     0     0    - /run/snapd/ns/lxd.mnt
+tmpfs          tmpfs        394M  680K  393M   1% /run/user/1000
+/dev/loop3     squashfs      56M   56M     0 100% /snap/core18/1997
+binfmt_misc    binfmt_misc     0     0     0    - /proc/sys/fs/binfmt_misc
+
+* references
+.link http://www.linfo.org/root_filesystem.html
+.link https://en.wikipedia.org/wiki/File_system
