@@ -22,14 +22,15 @@ nqq
 
 关闭已关闭的channel会崩溃
 
-- len获取channel中当前的值
+- len获取channel中当前的数据的数量
 
 - for range
 
 当channel被关闭并且没有值可接收时for range 会跳出循环
 
 * channel的内存结构
+
 * chanel的使用场景
-* 使用channel实现的几种并发模式
+
 * channel 的设计原理
 

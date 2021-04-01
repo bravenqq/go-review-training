@@ -5,15 +5,21 @@ Tags:go,goroutine
 nqq
 
 * 什么是goroutine, goroutine的栈内存结构
-* goroutien的调度机制
+
+* goroutien的调度模型
 - 内核线程
 - 逻辑处理器
 - 调度机制
+
 * goroutine间的通信
+
 * 使用gorotine实现的几种并发模式
 - runner
 - pool
 - work
+
+.link https://blog.golang.org/pipelines
+.link https://talks.golang.org/2012/concurrency.slide#57
 
 * 使用goroutine时的竞态问题如何处理
 

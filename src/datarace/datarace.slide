@@ -1,0 +1,20 @@
+understand data race
+
+tags:go, data race, channel, mutex
+
+nqq
+
+* 什么是数据竞争
+
+* 如何解决数据竞争
+
+- 读写分离
+
+- 对共享数据加锁
+
+* 锁的类型
+* 比较各种锁的性能和适用场景
+* channel与锁的比较
+
+.link https://golang.org/doc/articles/race_detector
+
