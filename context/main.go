@@ -9,9 +9,11 @@ import (
 )
 
 //1. 使用context 取消goroutine的执行
+//2. 使用context实现超时取消
 func main() {
 	tasks := make(chan int)
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	for i := 0; i < 10; i++ {
 		go func(ctx context.Context) {
 			for {
@@ -31,8 +33,6 @@ func main() {
 			tasks <- rand.Intn(100)
 		}
 	}()
-	time.Sleep(5 * time.Second)
-	cancel()
-	time.Sleep(5 * time.Second)
+	time.Sleep(10 * time.Second)
 
 }
