@@ -49,7 +49,7 @@ func (p *Pool) Close() error {
 	if p.closed {
 		return errors.New("已关闭")
 	}
-	p.closeC <- struct{}{}
+	close(p.closeC)
 	close(p.works)
 	p.wg.Wait()
 	p.closed = true
@@ -58,9 +58,14 @@ func (p *Pool) Close() error {
 
 func (p *Pool) run() {
 	go func() {
-		for w := range p.works {
-			w.Add()
+		for {
+			select {
+			case w := <-p.works:
+				w.Add()
+			case <-p.closeC:
+				p.wg.Done()
+				return
+			}
 		}
-		p.wg.Done()
 	}()
 }
