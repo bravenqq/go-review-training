@@ -3,6 +3,7 @@ package main
 
 import "fmt"
 
+//START OMIT/
 type Celsius float64
 type Fahrenheit float64
 type Kelvins float64
@@ -30,3 +31,5 @@ func main() {
 	freezing := CToF(FreezingC)
 	fmt.Println("the temperature is:", freezing)
 }
+
+//END OMIT/

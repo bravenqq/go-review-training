@@ -1,4 +1,4 @@
-# golang restudy
+golang intraduaction
 
 AbbyNie
 
@@ -6,7 +6,7 @@ nqq@aozsky.com
 
 Dec,30 2020
 
-## 系统的发展
+* 系统的发展
 
 - 庞大的库和依赖链
 
@@ -20,7 +20,7 @@ Dec,30 2020
 
 - 继承的问题
 
-## 静态类型编译语言与动态类型语言的比较
+* 静态类型编译语言与动态类型语言的比较
 
 - 类型安全和内存安全
 
@@ -30,7 +30,7 @@ Dec,30 2020
 
 - 高速编译
 
-## 设计原则
+* 设计原则
 
 - 保持正交
 
@@ -42,31 +42,13 @@ foo.Foo *myFoo = new foo.Foo(foo.FOO_INIT) //what's the problem
 
 - 减少输入，尽量让语言解决问题，保持类型系统清晰，没有类型层次结构（是指继承吗？）
 
-## 怎么做到高效的开发
+* 怎么做到高效的开发
 
-### 基本原理（Fundamentals）
+基本原理（Fundamentals）
 
-### 简洁的语法
+- 简洁的语法
 
 1. 语言的关键字是所有语言中最少的
-
-```
-example
-package main
-
-import (
-    "fmt"
-    "http"
-)
-
-func handler(c *http.Conn, r *http.Request) {
-    fmt.Fprintf(c, "Hello, %s.", r.URL.Path[1:])
-}
-func main() {
-    http.ListenAndServe(":8080",
-        http.HandlerFunc(handler))
-}
-```
 
 2. 类型声明简洁清晰，具有类型推断
 
@@ -78,9 +60,11 @@ func main() {
 
 6. 结构体的数据和方法是分离的
 
-7. 严格分离接口和实现,接口隐试满足
+7. 严格分离接口和实现,接口隐式满足
 
 8. 包的可见不可见通过大小写区分
+
+* 完善的官方包和工具链
 
 - 提供许多依赖包
 
@@ -92,7 +76,7 @@ func main() {
 
 - debugger
 
-## 如何做到程序的高效性
+* 如何做到程序的高效性
 
 - 运行时（Run-time）
 
@@ -108,11 +92,11 @@ func main() {
 
 - 垃圾回收
 
-- Package model
+* 简单高效的包管理机制和依赖管理
 
 1. 明确的依赖关系可加快构建速度（可加快编译和链接速度），构建速度取决于包管理机制 ？
 
-### 设计方法
+- 设计方法
 
 1. 依赖项管理
 
@@ -134,7 +118,7 @@ If A.go depends on B.go depends on C.go:
 
 3. 编译优化
 
-## C 语言编译过程
+- C 语言编译过程
 
 ```
 1.
@@ -142,9 +126,9 @@ If A.go depends on B.go depends on C.go:
 
 ```
 
-## 如何做到简洁高效的编程
+* 如何做到简洁高效的编程
 
-### 简洁的语法设计
+简洁的语法设计
 
 1. 关键字少
 
@@ -170,7 +154,7 @@ If A.go depends on B.go depends on C.go:
 
 12. testing
 
-## Why go
+* Why go
 
 - 编译速度
 

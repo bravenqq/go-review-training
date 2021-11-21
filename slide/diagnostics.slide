@@ -82,12 +82,6 @@ go使用go tool pprof提供了text,graph,callgrind性能分析阅读 [[https://b
 
 除了上面提供的运行时性能分析工具，go使用者可以通过[[https://golang.org/pkg/runtime/pprof/#Profile][pprof.Profile]]
 
-
-* Debugging
-* Runtime statistics and events
-* Execution tracer
-* GODEBUG
-
 * metric
 [[https://prometheus.io/docs/concepts/metric_types/][metric]]
 
