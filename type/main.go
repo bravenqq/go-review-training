@@ -1,8 +1,6 @@
 // Package main provides ...
 package main
 
-import "fmt"
-
 //START OMIT/
 type Celsius float64
 type Fahrenheit float64
@@ -28,8 +26,8 @@ func KToC(k Kelvins) Celsius { return Celsius(float64(k) - float64(Freezing)) }
 func CToK(c Celsius) Kelvins { return Kelvins(float64(c) + float64(Freezing)) }
 
 func main() {
-	freezing := CToF(FreezingC)
-	fmt.Println("the temperature is:", freezing)
+	// freezing := CToF(FreezingC)
+	// fmt.Println("the temperature is:", freezing)
 }
 
 //END OMIT/
